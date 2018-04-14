@@ -20,7 +20,7 @@ class Clock(BaseModule):
             self.data = []
             self.data.append(self.date)
             self.data.append(self.time)
-            logging.info("Completed updating clock...")
+            logging.debug("Completed updating clock...")
             sleep(0.100)
 
     @property

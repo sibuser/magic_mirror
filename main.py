@@ -1,11 +1,11 @@
-#!/usr/bin/env/python3
-# -*- coding: utf-8 -*-
+#!/usr/bin/env python3
 
 import logging
 
 import click
 import pygame
 
+from modules.birthday import Birthday
 from modules.clock import Clock
 from modules.weather import Weather
 from settings import mouse_visible, COLORS, KEY_DOWN, KEY_ESCAPE, KEY_WINDOW_X
@@ -22,17 +22,24 @@ def check_if_exit():
 
 
 @click.command()
-@click.option('--fullscreen', default=False, help='Run in full screen mode')
+@click.option('--fullscreen', default=False, help='Run in full screen mode', is_flag=True)
 @click.option('--resolution', default=(640, 480), type=(int, int), help='Window size width height')
 def main(fullscreen, resolution):
     logging.info('Started the mirror')
     logging.info('Loading modules')
 
     pygame.init()
-    screen = pygame.display.set_mode(resolution, fullscreen)
+    mode = 0
+    if fullscreen:
+        mode = pygame.FULLSCREEN
+    screen = pygame.display.set_mode(resolution, mode)
     screen.fill(COLORS['black'])
 
-    modules = [Weather(), Clock()]
+    modules = [
+        Weather(),
+        Clock(),
+        Birthday()
+    ]
     for module in modules:
         module.start()
 
@@ -44,10 +51,10 @@ def main(fullscreen, resolution):
         for module in modules:
             data = module.data
             for surface, position in data:
-                logging.info('Got surface %s' % surface)
+                logging.debug('Got surface %s' % surface)
                 screen.blit(surface, position)
 
-        logging.info('Flip')
+        logging.debug('Flip')
         pygame.display.flip()
 
         if check_if_exit():

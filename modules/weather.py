@@ -52,7 +52,7 @@ class Weather(BaseModule):
                 self.data.append(self.description)
                 self.data.append(self.city)
 
-            logging.info("Completed updating weather...")
+            logging.debug("Completed updating weather...")
 
             self._sleep()
 
@@ -126,3 +126,11 @@ class Weather(BaseModule):
         surface = self.font('light', 0.035).render(city_name, True, self.color)
         position = surface.get_rect(left=self.width / 100, top=110)
         return surface, position
+
+    @property
+    def sunset(self):
+        pass
+
+    @property
+    def sunrise(self):
+        pass
