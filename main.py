@@ -45,24 +45,26 @@ def main(fullscreen, resolution):
 
     game_clock = pygame.time.Clock()
     pygame.mouse.set_visible(mouse_visible)
-
-    while True:
-        screen.fill(COLORS['black'])
-        for module in modules:
-            data = module.data
-            for surface, position in data:
-                logging.debug('Got surface %s' % surface)
-                screen.blit(surface, position)
-
-        logging.debug('Flip')
-        pygame.display.flip()
-
-        if check_if_exit():
+    try:
+        while True:
+            screen.fill(COLORS['black'])
             for module in modules:
-                module.stop()
-            return
-        pygame.time.wait(1000)
-        game_clock.tick(1000)
+                data = module.data
+                for surface, position in data:
+                    logging.debug('Got surface %s' % surface)
+                    screen.blit(surface, position)
+
+            logging.debug('Flip')
+            pygame.display.flip()
+
+            if check_if_exit():
+                return
+            pygame.time.wait(1000)
+            game_clock.tick(1000)
+    finally:
+        logging.info('Stopping all threads')
+        for module in modules:
+            module.stop()
 
 
 if __name__ == '__main__':
