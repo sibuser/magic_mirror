@@ -59,8 +59,8 @@ def main(fullscreen, resolution):
 
             if check_if_exit():
                 return
-            pygame.time.wait(1000)
-            game_clock.tick(1000)
+            pygame.time.wait(10)
+            game_clock.tick(10)
     finally:
 
         logging.info('Stopping all threads')
