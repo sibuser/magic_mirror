@@ -62,6 +62,7 @@ def main(fullscreen, resolution):
             pygame.time.wait(1000)
             game_clock.tick(1000)
     finally:
+
         logging.info('Stopping all threads')
         for module in modules:
             module.stop()
