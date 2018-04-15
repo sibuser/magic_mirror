@@ -34,3 +34,10 @@ FONTS = {
     'light': path.join("resources", "font", "font-light.ttf"),
     'regular': path.join("resources", "font", "font-regular.ttf")
 }
+
+
+ONE_HOUR = 3600
+ONE_SECOND = 1
+FIVE_MINUTES = 300
+ONE_MINUTE = 60
+TEN_MS = 10

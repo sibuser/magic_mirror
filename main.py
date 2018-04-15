@@ -10,7 +10,9 @@ from modules.clock import Clock
 from modules.currency import Currency
 from modules.vasttraffik import Vasttrafik
 from modules.weather import Weather
-from settings import mouse_visible, COLORS, KEY_DOWN, KEY_ESCAPE, KEY_WINDOW_X
+from modules.display_control import DisplayOnOff
+
+from settings import mouse_visible, COLORS, KEY_DOWN, KEY_ESCAPE, KEY_WINDOW_X, TEN_MS
 
 logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s', datefmt='%H:%M:%S',
                     level=logging.DEBUG)
@@ -48,6 +50,7 @@ def main(fullscreen, resolution):
         Clock(),
         Birthday(),
         Currency(),
+        DisplayOnOff(),
         Vasttrafik()
     ]
     for module in modules:
@@ -66,8 +69,8 @@ def main(fullscreen, resolution):
 
             if check_if_exit():
                 return
-            pygame.time.wait(10)
-            game_clock.tick(10)
+            pygame.time.wait(TEN_MS)
+            game_clock.tick(TEN_MS)
     finally:
 
         logging.info('Stopping all threads')

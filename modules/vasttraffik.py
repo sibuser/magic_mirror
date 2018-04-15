@@ -5,7 +5,7 @@ from threading import Thread
 import vasttrafik
 
 from modules.base import BaseModule
-from settings import vasttrafik_key, vasttrafik_secret, buss_stops, skip_directions
+from settings import vasttrafik_key, vasttrafik_secret, buss_stops, skip_directions, ONE_MINUTE
 
 
 class Vasttrafik(BaseModule):
@@ -27,7 +27,7 @@ class Vasttrafik(BaseModule):
             self.data = self.tmp_data[:]
             self.tmp_data.clear()
             logging.debug("Completed updating %s..." % self.__class__.__name__)
-            self.sleep(60)
+            self.sleep(ONE_MINUTE)
 
     def update_departures(self, buss_stop):
         self.top += 20

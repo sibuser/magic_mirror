@@ -4,6 +4,7 @@ from threading import Thread
 from time import sleep
 
 from modules.base import BaseModule
+from settings import ONE_SECOND
 
 
 class Clock(BaseModule):
@@ -22,7 +23,7 @@ class Clock(BaseModule):
             self.data = self.tmp_data[:]
             self.tmp_data.clear()
             logging.debug("Completed updating %s..." % self.__class__.__name__)
-            sleep(1)
+            sleep(ONE_SECOND)
 
     @property
     def time(self):

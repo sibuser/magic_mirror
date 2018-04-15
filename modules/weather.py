@@ -8,7 +8,7 @@ from urllib.request import urlopen
 import pygame
 
 from modules.base import BaseModule
-from settings import COLORS, open_weather_token, weather_country, weather_city
+from settings import COLORS, open_weather_token, weather_country, weather_city, FIVE_MINUTES
 
 
 class Weather(BaseModule):
@@ -34,7 +34,7 @@ class Weather(BaseModule):
                 self.data.append(self.city)
 
             logging.debug("Completed updating %s..." % self.__class__.__name__)
-            self.sleep(300)
+            self.sleep(FIVE_MINUTES)
 
     def fetch_forecast(self):
         try:

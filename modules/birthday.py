@@ -5,6 +5,7 @@ from datetime import datetime, date
 from threading import Thread
 
 from modules.base import BaseModule
+from settings import ONE_HOUR
 
 
 class Birthday(BaseModule):
@@ -24,7 +25,7 @@ class Birthday(BaseModule):
             for event in self.upcoming_birthdays:
                 self.data.append(event)
             logging.debug("Completed updating %s..." % self.__class__.__name__)
-            self.sleep(3600)
+            self.sleep(ONE_HOUR)
 
     @property
     def header(self):

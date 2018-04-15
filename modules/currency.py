@@ -4,6 +4,7 @@ from threading import Thread
 from currency_converter import CurrencyConverter
 
 from modules.base import BaseModule
+from settings import ONE_HOUR
 
 
 class Currency(BaseModule):
@@ -16,11 +17,11 @@ class Currency(BaseModule):
     def update(self):
         while not self.shutdown:
             self.update_rate()
-            self.data = []
+            self.data.clear()
             self.data = self.tmp_data[:]
             self.tmp_data.clear()
             logging.debug("Completed updating %s..." % self.__class__.__name__)
-            self.sleep(3600)
+            self.sleep(ONE_HOUR)
 
     def update_rate(self):
         surface = self.font('regular', 0.025).render('SEK/RUB', True, self.color)
