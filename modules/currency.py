@@ -1,6 +1,5 @@
 import logging
 from threading import Thread
-from time import sleep
 
 from currency_converter import CurrencyConverter
 
