@@ -91,21 +91,21 @@ class Weather(BaseModule):
         icon_name = self.icon_mapping[str(self.weather_data['weather'][0]['id'])]['icon']
         icon_name = 'cloudy'
         surface = pygame.image.load(os.path.join('resources', 'icons', '%s.png' % icon_name))
-        position = surface.get_rect(left=self.width / 8, top=30)
+        position = surface.get_rect(left=self.width / 8, top=self.height * 0.04)
         return surface, position
 
     @property
     def description(self):
         desc = self.weather_data['weather'][0]['description'].title()
         surface = self.font('regular', 0.045).render(desc, True, self.color)
-        position = surface.get_rect(left=self.width / 100, top=120)
+        position = surface.get_rect(left=self.width / 100, top=self.height * 0.19)
         return surface, position
 
     @property
     def city(self):
         city_name = self.weather_data['name']
         surface = self.font('light', 0.035).render(city_name, True, self.color)
-        position = surface.get_rect(left=self.width / 100, top=150)
+        position = surface.get_rect(left=self.width / 100, top=self.height * 0.25)
         return surface, position
 
     @property
