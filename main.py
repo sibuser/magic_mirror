@@ -4,6 +4,7 @@ import logging
 
 import click
 import pygame
+from subprocess import call
 
 from modules.birthday import Birthday
 from modules.clock import Clock
@@ -50,9 +51,16 @@ def main(fullscreen, resolution):
         Clock(),
         Birthday(),
         Currency(),
-        DisplayOnOff(),
         Vasttrafik()
     ]
+    try:
+        # Check if vcgencmd is installed, to see if it is running on a
+        # raspberry pi with the requires software installed
+        call("vcgencmd")
+        modules.append(DisplayOnOff())
+    except FileNotFoundError:
+        pass
+
     for module in modules:
         module.start()
 
