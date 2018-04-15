@@ -7,6 +7,7 @@ import pygame
 
 from modules.birthday import Birthday
 from modules.clock import Clock
+from modules.vasttraffik import Vasttrafik
 from modules.weather import Weather
 from settings import mouse_visible, COLORS, KEY_DOWN, KEY_ESCAPE, KEY_WINDOW_X
 
@@ -38,7 +39,8 @@ def main(fullscreen, resolution):
     modules = [
         Weather(),
         Clock(),
-        Birthday()
+        Birthday(),
+        Vasttrafik()
     ]
     for module in modules:
         module.start()
