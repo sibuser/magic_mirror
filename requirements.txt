@@ -1,4 +1,4 @@
 pygame==1.9.3
 click==6.7
 vtjp==0.1.14
-CurrencyConverter==0.13.3
+currencyconverter==0.13.3
