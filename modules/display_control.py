@@ -18,6 +18,7 @@ class DisplayOnOff(BaseModule):
         self.display_on = self.display_status()
 
     def update(self):
+        logging.debug('Display status %s' % self.display_on)
         if not self.display_on and datetime.today().hour > TIME_TURN_ON_SCREEN:
             self.turn_on()
         if self.display_on and datetime.today().hour > TIME_TURN_OFF_SCREEN:
