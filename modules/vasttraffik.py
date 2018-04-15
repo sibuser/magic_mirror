@@ -44,6 +44,12 @@ class Vasttrafik(BaseModule):
             if any([stop in departure['direction'] for stop in skip_directions]):
                 continue
 
+            arr_hours = int(departure['time'].split(':')[0])
+            arr_minutes = int(departure['time'].split(':')[1])
+            arrival_time = datetime.now().replace(hour=arr_hours, minute=arr_minutes)
+            arrive_in = round((arrival_time - datetime.now()).total_seconds() / 60)
+            if arrive_in < 1:
+                continue
             msg = '{sname}'.format(**departure)
             surface = self.font('light', 0.035).render(msg, True, self.color)
             position = surface.get_rect(left=self.width / 1.8, top=self.top)
@@ -54,10 +60,7 @@ class Vasttrafik(BaseModule):
             position = surface.get_rect(left=self.width / 1.6, top=self.top)
             self.tmp_data.append((surface, position))
 
-            arr_hours = int(departure['time'].split(':')[0])
-            arr_minutes = int(departure['time'].split(':')[1])
-            arrival_time = datetime.now().replace(hour=arr_hours, minute=arr_minutes)
-            msg = '{time}'.format(time=round((arrival_time - datetime.now()).total_seconds() / 60))
+            msg = '{time}'.format(time=arrive_in)
             surface = self.font('light', 0.035).render(msg, True, self.color)
             position = surface.get_rect(left=self.width / 1.15, top=self.top)
             self.tmp_data.append((surface, position))
