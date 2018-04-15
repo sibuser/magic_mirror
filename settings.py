@@ -1,5 +1,10 @@
 from os import path, environ
 
+from dotenv import load_dotenv
+
+env_path = path.join('.', '.env')
+load_dotenv(dotenv_path=env_path, verbose=True)
+
 version = "0.1"
 
 mouse_visible = False
@@ -34,7 +39,6 @@ FONTS = {
     'light': path.join("resources", "font", "font-light.ttf"),
     'regular': path.join("resources", "font", "font-regular.ttf")
 }
-
 
 ONE_HOUR = 3600
 ONE_SECOND = 1
