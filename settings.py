@@ -13,6 +13,11 @@ weather_update_delay = 3600
 
 open_weather_token = environ.get('OPEN_WEATHER_TOKEN')
 
+vasttrafik_key = environ.get('VASTTRAFIK_KEY')
+vasttrafik_secret = environ.get('VASTTRAFIK_SECRET')
+buss_stops = ['Bifrost', 'Havrekornsgatan']
+skip_directions = ['Helenedal']
+
 KEY_DOWN = 2
 KEY_ESCAPE = 27
 KEY_WINDOW_X = 12
@@ -27,6 +32,5 @@ COLORS = {
 FONTS = {
     'heavy': path.join("resources", "font", "font-heavy.ttf"),
     'light': path.join("resources", "font", "font-light.ttf"),
-    'regular': path.join("resources", "font", "font-regular.ttf"),
-    'icons': path.join("resources", "font", "weather-icons.ttf"),
+    'regular': path.join("resources", "font", "font-regular.ttf")
 }
