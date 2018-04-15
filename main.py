@@ -13,7 +13,7 @@ from modules.vasttraffik import Vasttrafik
 from modules.weather import Weather
 from modules.display_control import DisplayOnOff
 
-from settings import mouse_visible, COLORS, KEY_DOWN, KEY_ESCAPE, KEY_WINDOW_X, TEN_MS
+from settings import MOUSE_VISIBLE, COLORS, KEY_DOWN, KEY_ESCAPE, KEY_WINDOW_X, TEN_MS
 
 logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s', datefmt='%H:%M:%S',
                     level=logging.DEBUG)
@@ -67,7 +67,7 @@ def main(fullscreen, resolution):
         module.start()
 
     game_clock = pygame.time.Clock()
-    pygame.mouse.set_visible(mouse_visible)
+    pygame.mouse.set_visible(MOUSE_VISIBLE)
     try:
         while True:
             screen.fill(COLORS['black'])

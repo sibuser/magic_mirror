@@ -8,7 +8,7 @@ from urllib.request import urlopen
 import pygame
 
 from modules.base import BaseModule
-from settings import COLORS, open_weather_token, weather_country, weather_city, FIVE_MINUTES
+from settings import COLORS, WEATHER_API_TOKEN, WEATHER_COUNTRY, WEATHER_CITY, FIVE_MINUTES
 
 
 class Weather(BaseModule):
@@ -38,9 +38,9 @@ class Weather(BaseModule):
 
     def fetch_forecast(self):
         try:
-            contents = urlopen(self.url.format(city=weather_city,
-                                               country=weather_country,
-                                               token=open_weather_token)).read().decode('utf-8')
+            contents = urlopen(self.url.format(city=WEATHER_CITY,
+                                               country=WEATHER_COUNTRY,
+                                               token=WEATHER_API_TOKEN)).read().decode('utf-8')
             self.weather_data = json.loads(contents)
         except HTTPError as err:
             logging.error(err)
@@ -76,14 +76,14 @@ class Weather(BaseModule):
     @property
     def empty_forecast(self):
         surface = self.font('light', 0.045).render('Filed to fetch forecast', True, COLORS['red'])
-        position = surface.get_rect(left=self.width / 100, top=30)
+        position = surface.get_rect(left=self.width / 100, top=self.height * 0.01)
         return surface, position
 
     @property
     def temp(self):
         temp = '%d\u00b0' % (self.weather_data['main']['temp'] - 273.15)
         surface = self.font('light', 0.15).render(temp, True, self.color)
-        position = surface.get_rect(left=self.width / 50, top=2)
+        position = surface.get_rect(left=0, top=0)
         return surface, position
 
     @property

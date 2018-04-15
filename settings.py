@@ -5,23 +5,34 @@ from dotenv import load_dotenv
 env_path = path.join('.', '.env')
 load_dotenv(dotenv_path=env_path, verbose=True)
 
-version = "0.1"
+VERSION = "0.2"
 
-mouse_visible = False
+ONE_HOUR = 3600
+ONE_SECOND = 1
+FIVE_MINUTES = 300
+ONE_MINUTE = 60
+TEN_MS = 10
 
-weather_city = 'Gothenburg'
+MOUSE_VISIBLE = False
 
-weather_country = 'se'
+WEATHER_API_TOKEN = environ.get('OPEN_WEATHER_TOKEN')
+WEATHER_CITY = 'Gothenburg'
+WEATHER_COUNTRY = 'se'
+WEATHER_UPDATE_DELAY = 3600
 
-# Delay before allowing data update in seconds,
-weather_update_delay = 3600
+CLOCK_UPDATE_DELAY = ONE_SECOND
 
-open_weather_token = environ.get('OPEN_WEATHER_TOKEN')
+CURRENCY_UPDATE_DELAY = ONE_HOUR
+BIRTHDAY_UPDATE_DELAY = ONE_HOUR
 
-vasttrafik_key = environ.get('VASTTRAFIK_KEY')
-vasttrafik_secret = environ.get('VASTTRAFIK_SECRET')
-buss_stops = ['Bifrost', 'Havrekornsgatan']
-skip_directions = ['Helenedal']
+TIME_TURN_OFF_SCREEN = 23
+TIME_TURN_ON_SCREEN = 6
+
+VASTTRAFIK_UPDATE_DELAY = ONE_MINUTE
+VASTTRAFIK_KEY = environ.get('VASTTRAFIK_KEY')
+VASTTRAFIK_SECRET = environ.get('VASTTRAFIK_SECRET')
+BUSS_STOPS = ['Bifrost', 'Havrekornsgatan']
+SKIP_DIRECTIONS = ['Helenedal']
 
 KEY_DOWN = 2
 KEY_ESCAPE = 27
@@ -40,8 +51,4 @@ FONTS = {
     'regular': path.join("resources", "font", "font-regular.ttf")
 }
 
-ONE_HOUR = 3600
-ONE_SECOND = 1
-FIVE_MINUTES = 300
-ONE_MINUTE = 60
-TEN_MS = 10
+

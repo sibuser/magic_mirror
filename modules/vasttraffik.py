@@ -5,14 +5,15 @@ from threading import Thread
 import vasttrafik
 
 from modules.base import BaseModule
-from settings import vasttrafik_key, vasttrafik_secret, buss_stops, skip_directions, ONE_MINUTE
+from settings import VASTTRAFIK_KEY, VASTTRAFIK_SECRET, BUSS_STOPS, SKIP_DIRECTIONS, \
+    VASTTRAFIK_UPDATE_DELAY
 
 
 class Vasttrafik(BaseModule):
     def __init__(self):
         super().__init__()
         self.thread = Thread(target=self.update)
-        self.jp = vasttrafik.JournyPlanner(key=vasttrafik_key, secret=vasttrafik_secret)
+        self.jp = vasttrafik.JournyPlanner(key=VASTTRAFIK_KEY, secret=VASTTRAFIK_SECRET)
         self.data = []
         self.tmp_data = []
         self.top = 180
@@ -20,14 +21,14 @@ class Vasttrafik(BaseModule):
     def update(self):
         while not self.shutdown:
             self.top = 180
-            for stop in buss_stops:
+            for stop in BUSS_STOPS:
                 self.update_departures(stop)
 
             self.data.clear()
             self.data = self.tmp_data[:]
             self.tmp_data.clear()
             logging.debug("Completed updating %s..." % self.__class__.__name__)
-            self.sleep(ONE_MINUTE)
+            self.sleep(VASTTRAFIK_UPDATE_DELAY)
 
     def update_departures(self, buss_stop):
         self.top += 20
@@ -39,7 +40,7 @@ class Vasttrafik(BaseModule):
         self.top += 20
 
         for departure in self.jp.departureboard(buss_stop_id)[:6]:
-            if any([stop in departure['direction'] for stop in skip_directions]):
+            if any([stop in departure['direction'] for stop in SKIP_DIRECTIONS]):
                 continue
 
             arr_hours = int(departure['time'].split(':')[0])

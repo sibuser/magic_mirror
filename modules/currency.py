@@ -4,7 +4,7 @@ from threading import Thread
 from currency_converter import CurrencyConverter
 
 from modules.base import BaseModule
-from settings import ONE_HOUR
+from settings import CURRENCY_UPDATE_DELAY
 
 
 class Currency(BaseModule):
@@ -21,7 +21,7 @@ class Currency(BaseModule):
             self.data = self.tmp_data[:]
             self.tmp_data.clear()
             logging.debug("Completed updating %s..." % self.__class__.__name__)
-            self.sleep(ONE_HOUR)
+            self.sleep(CURRENCY_UPDATE_DELAY)
 
     def update_rate(self):
         surface = self.font('regular', 0.025).render('SEK/RUB', True, self.color)

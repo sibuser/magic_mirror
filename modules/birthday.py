@@ -5,7 +5,7 @@ from datetime import datetime, date
 from threading import Thread
 
 from modules.base import BaseModule
-from settings import ONE_HOUR
+from settings import BIRTHDAY_UPDATE_DELAY
 
 
 class Birthday(BaseModule):
@@ -25,7 +25,7 @@ class Birthday(BaseModule):
             for event in self.upcoming_birthdays:
                 self.data.append(event)
             logging.debug("Completed updating %s..." % self.__class__.__name__)
-            self.sleep(ONE_HOUR)
+            self.sleep(BIRTHDAY_UPDATE_DELAY)
 
     @property
     def header(self):
