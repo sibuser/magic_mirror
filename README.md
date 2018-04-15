@@ -8,7 +8,7 @@ Modular magic mirror display written in python based on Pygame.
     - vtjp (for vasstrafik module)
     
 #### Usage:
->python3 main.py [-h] [-f] [-r width height]
+>python3 main.py [--help] [-f] [--fullscreen] [-r width height] [--resolution width height] 
 
 >python3 main.py (with default window size)
 
