@@ -32,20 +32,20 @@ class Birthday(BaseModule):
     @property
     def header(self):
         surface = self.font('light', 0.035).render('Upcoming Birthdays', True, self.color)
-        position = surface.get_rect(left=self.width / 100, top=150)
+        position = surface.get_rect(left=self.width / 100, top=180)
         return surface, position
 
     @property
     def delimiter(self):
         surface = self.font('light', 0.045).render('-'*20, True, self.color)
-        position = surface.get_rect(left=self.width / 100, top=160)
+        position = surface.get_rect(left=self.width / 100, top=200)
         return surface, position
 
     @property
     def upcoming_birthdays(self):
-        top = 180
+        top = 220
         for brth_as_str in self.get_events():
-            surface = self.font('light', 0.035).render(brth_as_str, True, self.color)
+            surface = self.font('regular', 0.035).render(brth_as_str, True, self.color)
             position = surface.get_rect(left=self.width / 100, top=top)
             top += 20
             yield surface, position
@@ -65,6 +65,6 @@ class Birthday(BaseModule):
         text = '{weekday}, {month} {day}'.format(weekday='Saturday',
                                                  month=today.strftime('%B'),
                                                  day=today.day)
-        surface = self.font('light', 0.045).render(text, True, self.color)
+        surface = self.font('regular', 0.045).render(text, True, self.color)
         position = surface.get_rect(left=self.width / 1.4, top=100)
         return surface, position
