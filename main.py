@@ -51,7 +51,7 @@ def main(fullscreen, resolution):
     modules = [
         Weather(),
         Clock(),
-        Birthday(),
+        # Birthday(),
         Currency(),
         Vasttrafik()
     ]
