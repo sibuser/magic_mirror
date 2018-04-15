@@ -1,34 +1,16 @@
 import json
 import logging
+import os
 from threading import Thread
 from urllib.error import HTTPError
 from urllib.request import urlopen
+
+import pygame
 
 from modules.base import BaseModule
 from settings import COLORS, open_weather_token, weather_country, weather_city
 
 logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
-
-conditions = {"sun": u"",
-              "clear": u"",
-              "clouds": u"",
-              "rain": u"",
-              "heavy rain": u"",
-              "shower": u"",
-              "storm": u"",
-              "thunder": u"",
-              "lightning": u"",
-              "hail": u"",
-              "snow": u"",
-              "cyclone": u"",
-              "wind": u"",
-              "partly cloudy": u"",
-              "light showers": u"",
-              "light rain": u"",
-              "tornado": u"",
-              "overcast": u"",
-              "unknown": u""
-              }
 
 
 class Weather(BaseModule):
@@ -38,9 +20,10 @@ class Weather(BaseModule):
         self.thread = Thread(target=self.update)
         self.weather_data = None
         self.data = []
+        with open(os.path.join('resources', 'icon_map.json')) as f:
+            self.icon_mapping = json.loads(f.read())
 
     def update(self):
-        """Returns updated weather display"""
         while not self.shutdown:
             self.fetch_forecast()
             self.data = []
@@ -103,28 +86,28 @@ class Weather(BaseModule):
     def temp(self):
         temp = '%d\u00b0' % (self.weather_data['main']['temp'] - 273.15)
         surface = self.font('light', 0.15).render(temp, True, self.color)
-        position = surface.get_rect(left=self.width / 200, top=2)
+        position = surface.get_rect(left=self.width / 50, top=2)
         return surface, position
 
     @property
     def condition(self):
-        condition = conditions[self.weather_data['weather'][0]['main'].lower()]
-        surface = self.font('icons', 0.1).render(condition, True, self.color)
-        position = surface.get_rect(left=self.width / 6.5, top=3)
+        icon_name = self.icon_mapping[str(self.weather_data['weather'][0]['id'])]['icon']
+        surface = pygame.image.load(os.path.join('resources', 'icons', '%s.png' % icon_name))
+        position = surface.get_rect(left=self.width / 8, top=30)
         return surface, position
 
     @property
     def description(self):
         desc = self.weather_data['weather'][0]['description'].title()
-        surface = self.font('light', 0.045).render(desc, True, self.color)
-        position = surface.get_rect(left=self.width / 100, top=80)
+        surface = self.font('regular', 0.045).render(desc, True, self.color)
+        position = surface.get_rect(left=self.width / 100, top=120)
         return surface, position
 
     @property
     def city(self):
         city_name = self.weather_data['name']
         surface = self.font('light', 0.035).render(city_name, True, self.color)
-        position = surface.get_rect(left=self.width / 100, top=110)
+        position = surface.get_rect(left=self.width / 100, top=150)
         return surface, position
 
     @property
