@@ -18,7 +18,6 @@ class Birthday(BaseModule):
         self.birthdays = None
 
     def update(self):
-        """Returns updated weather display"""
         while not self.shutdown:
             with open(os.path.join('resources', 'birthdays.json')) as f:
                 self.birthdays = json.loads(f.read())
@@ -27,7 +26,7 @@ class Birthday(BaseModule):
             self.data.append(self.delimiter)
             for event in self.upcoming_birthdays:
                 self.data.append(event)
-            logging.debug("Completed updating clock...")
+            logging.debug("Completed updating %s..." % self.__class__.__name__)
             sleep(0.100)
 
     @property
