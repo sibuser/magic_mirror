@@ -23,8 +23,13 @@ def check_if_exit():
 
 
 @click.command()
-@click.option('--fullscreen', '-f', default=False, help='Run in full screen mode', is_flag=True)
-@click.option('--resolution', '-r', default=(640, 480), type=(int, int), help='Window size width height')
+@click.option('--fullscreen', '-f',
+              default=False,
+              help='Run in full screen mode', is_flag=True)
+@click.option('--resolution', '-r',
+              default=(640, 480),
+              type=(int, int),
+              help='Window size width height')
 def main(fullscreen, resolution):
     logging.info('Started the mirror')
     logging.info('Loading modules')
