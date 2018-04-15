@@ -13,13 +13,17 @@ class Clock(BaseModule):
         super().__init__()
         self.thread = Thread(target=self.update)
         self.data = []
+        self.tmp_data = []
 
     def update(self):
         """Returns updated weather display"""
         while not self.shutdown:
+            self.tmp_data.append(self.date)
+            self.tmp_data.append(self.time)
+
             self.data = []
-            self.data.append(self.date)
-            self.data.append(self.time)
+            self.data = self.tmp_data[:]
+            self.tmp_data.clear()
             logging.debug("Completed updating clock...")
             sleep(1)
 
