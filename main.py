@@ -7,11 +7,13 @@ import pygame
 
 from modules.birthday import Birthday
 from modules.clock import Clock
+from modules.currency import Currency
 from modules.vasttraffik import Vasttrafik
 from modules.weather import Weather
 from settings import mouse_visible, COLORS, KEY_DOWN, KEY_ESCAPE, KEY_WINDOW_X
 
-logging.basicConfig(format='%(asctime)s;%(levelname)s;%(message)s', level=logging.INFO)
+logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s', datefmt='%H:%M:%S',
+                    level=logging.DEBUG)
 
 
 def check_if_exit():
@@ -45,6 +47,7 @@ def main(fullscreen, resolution):
         Weather(),
         Clock(),
         Birthday(),
+        Currency(),
         Vasttrafik()
     ]
     for module in modules:
@@ -58,10 +61,7 @@ def main(fullscreen, resolution):
             for module in modules:
                 data = module.data
                 for surface, position in data:
-                    logging.debug('Got surface %s' % surface)
                     screen.blit(surface, position)
-
-            logging.debug('Flip')
             pygame.display.flip()
 
             if check_if_exit():
