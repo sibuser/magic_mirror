@@ -1,5 +1,6 @@
 import subprocess
 from datetime import datetime
+from threading import Thread
 
 from modules.base import BaseModule
 
@@ -8,6 +9,8 @@ class DisplayOnOff(BaseModule):
     """Automatically turns off the display on a Raspberry Pi"""
     def __init__(self):
         super().__init__()
+        self.thread = Thread(target=self.update)
+
         self.display_on = self.display_status()
 
     def update(self):
