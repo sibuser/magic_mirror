@@ -44,6 +44,7 @@ def main(fullscreen, resolution):
     if fullscreen:
         logging.info('Launching in full screen mode')
         mode = pygame.FULLSCREEN
+        resolution = [0, 0]
     screen = pygame.display.set_mode(resolution, mode)
     screen.fill(COLORS['black'])
 
