@@ -33,7 +33,7 @@ ENABLE_OF_OFF_SCREEN = environ.get('ENABLE_ON_OFF_SCREEN', True)
 VASTTRAFIK_UPDATE_DELAY = ONE_MINUTE
 VASTTRAFIK_KEY = environ.get('VASTTRAFIK_KEY')
 VASTTRAFIK_SECRET = environ.get('VASTTRAFIK_SECRET')
-BUSS_STOPS = ['Bifrost', 'Havrekornsgatan']
+BUSS_STOPS = ['Bifrost', 'Vetekornsgatan']
 SKIP_DIRECTIONS = ['Helenedal']
 
 KEY_DOWN = 2
