@@ -17,8 +17,6 @@ class BaseModule(object):
         self.date_pos = 0.18
         self.date_scale = 0.045
 
-
-
     def font(self, name, scale):
         return pygame.font.Font(FONTS[name], int(scale * self.height))
 
