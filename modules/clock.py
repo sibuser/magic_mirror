@@ -28,8 +28,8 @@ class Clock(BaseModule):
     @property
     def time(self):
         current_time = datetime.today().strftime("%H:%M")
-        surface = self.font('light', 0.15).render(current_time, True, self.color)
-        position = surface.get_rect(left=self.width / 1.4, top=self.height * 0)
+        surface = self.font('light', self.time_scale).render(current_time, True, self.color)
+        position = surface.get_rect(left=self.width / 1.4, top=self.height * self.time_pos)
         return surface, position
 
     @property
@@ -38,6 +38,6 @@ class Clock(BaseModule):
         text = '{weekday}, {month} {day}'.format(weekday='Saturday',
                                                  month=today.strftime('%B'),
                                                  day=today.day)
-        surface = self.font('light', 0.045).render(text, True, self.color)
-        position = surface.get_rect(left=self.width / 1.4, top=self.height * 0.18)
+        surface = self.font('light', self.date_scale).render(text, True, self.color)
+        position = surface.get_rect(left=self.width / 1.4, top=self.height * self.date_pos)
         return surface, position

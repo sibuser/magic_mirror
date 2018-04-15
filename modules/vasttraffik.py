@@ -1,12 +1,12 @@
 import logging
-from datetime import datetime
 from threading import Thread
 
 import vasttrafik
+from datetime import datetime
 
 from modules.base import BaseModule
-from settings import VASTTRAFIK_KEY, VASTTRAFIK_SECRET, BUSS_STOPS, SKIP_DIRECTIONS, \
-    VASTTRAFIK_UPDATE_DELAY
+from settings import VASTTRAFIK_KEY, VASTTRAFIK_SECRET, BUSS_STOPS, VASTTRAFIK_UPDATE_DELAY, \
+    SKIP_DIRECTIONS
 
 
 class Vasttrafik(BaseModule):
@@ -16,11 +16,13 @@ class Vasttrafik(BaseModule):
         self.jp = vasttrafik.JournyPlanner(key=VASTTRAFIK_KEY, secret=VASTTRAFIK_SECRET)
         self.data = []
         self.tmp_data = []
-        self.top = 180
+        self.traffic_scale = 0.035
+        self.traffic_top = 0.26
 
     def update(self):
         while not self.shutdown:
-            self.top = 180
+            self.traffic_top = 0.26
+
             for stop in BUSS_STOPS:
                 self.update_departures(stop)
 
@@ -31,13 +33,13 @@ class Vasttrafik(BaseModule):
             self.sleep(VASTTRAFIK_UPDATE_DELAY)
 
     def update_departures(self, buss_stop):
-        self.top += 20
+        self.traffic_top += 0.042
         buss_stop_id = self.jp.location_name(buss_stop)[0]['id']
         msg = '{stop}'.format(stop=buss_stop)
-        surface = self.font('regular', 0.035).render(msg, True, self.color)
-        position = surface.get_rect(left=self.width / 1.8, top=self.top)
+        surface = self.font('regular', self.traffic_scale).render(msg, True, self.color)
+        position = surface.get_rect(left=self.width / 1.5, top=self.height * self.traffic_top)
         self.tmp_data.append((surface, position))
-        self.top += 20
+        self.traffic_top += 0.042
 
         for departure in self.jp.departureboard(buss_stop_id)[:6]:
             if any([stop in departure['direction'] for stop in SKIP_DIRECTIONS]):
@@ -50,17 +52,18 @@ class Vasttrafik(BaseModule):
             if arrive_in < 1:
                 continue
             msg = '{sname}'.format(**departure)
-            surface = self.font('light', 0.035).render(msg, True, self.color)
-            position = surface.get_rect(left=self.width / 1.8, top=self.top)
+            surface = self.font('light', self.traffic_scale).render(msg, True, self.color)
+            position = surface.get_rect(left=self.width / 1.8, top=self.height * self.traffic_top)
             self.tmp_data.append((surface, position))
 
             msg = '{direction}'.format(**departure)
-            surface = self.font('light', 0.035).render(msg, True, self.color)
-            position = surface.get_rect(left=self.width / 1.6, top=self.top)
+            surface = self.font('light', self.traffic_scale).render(msg, True, self.color)
+            position = surface.get_rect(left=self.width / 1.6, top=self.height * self.traffic_top)
             self.tmp_data.append((surface, position))
 
             msg = '{time}'.format(time=arrive_in)
-            surface = self.font('light', 0.035).render(msg, True, self.color)
-            position = surface.get_rect(left=self.width / 1.15, top=self.top)
+            surface = self.font('light', self.traffic_scale).render(msg, True, self.color)
+            position = surface.get_rect(left=self.width / 1.15, top=self.height * self.traffic_top)
             self.tmp_data.append((surface, position))
-            self.top += 20
+            self.traffic_top += 0.042
+

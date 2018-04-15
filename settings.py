@@ -62,3 +62,4 @@ FONTS = {
     'light': path.join("resources", "font", "font-light.ttf"),
     'regular': path.join("resources", "font", "font-regular.ttf")
 }
+
