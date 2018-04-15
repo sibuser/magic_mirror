@@ -33,19 +33,17 @@ class Vasttrafik(BaseModule):
             self.sleep(VASTTRAFIK_UPDATE_DELAY)
 
     def update_departures(self, buss_stop):
-        buss_stop_id = self.jp.location_name(buss_stop)[0]['id']
-        departures = self.jp.departureboard(buss_stop_id)
-        if not departures:
-            return
         self.traffic_top += 0.042
+        buss_stop_id = self.jp.location_name(buss_stop)[0]['id']
         msg = '{stop}'.format(stop=buss_stop)
         surface = self.font('regular', self.traffic_scale).render(msg, True, self.color)
         position = surface.get_rect(left=self.width / 1.5, top=self.height * self.traffic_top)
         self.tmp_data.append((surface, position))
         self.traffic_top += 0.042
 
-        for departure in departures:
+        for departure in self.jp.departureboard(buss_stop_id)[:6]:
             if any([stop in departure['direction'] for stop in SKIP_DIRECTIONS]):
+                logging.debug('Skipping %s' % departure['direction'])
                 continue
 
             arr_hours = int(departure['time'].split(':')[0])
