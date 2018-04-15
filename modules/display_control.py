@@ -4,7 +4,8 @@ from datetime import datetime
 from threading import Thread
 
 from modules.base import BaseModule
-from settings import TIME_TURN_ON_SCREEN, TIME_TURN_OFF_SCREEN, DISPLAY_ON_OFF_UPDATE_DELAY
+from settings import TIME_TURN_ON_SCREEN, TIME_TURN_OFF_SCREEN, DISPLAY_ON_OFF_UPDATE_DELAY, \
+    ENABLE_OF_OFF_SCREEN
 
 
 class DisplayOnOff(BaseModule):
@@ -19,9 +20,9 @@ class DisplayOnOff(BaseModule):
 
     def update(self):
         logging.debug('Display status %s' % self.display_on)
-        if not self.display_on and datetime.today().hour >= TIME_TURN_ON_SCREEN:
+        if not self.display_on and datetime.today().hour >= TIME_TURN_ON_SCREEN and ENABLE_OF_OFF_SCREEN:
             self.turn_on()
-        if self.display_on and datetime.today().hour >= TIME_TURN_OFF_SCREEN:
+        if self.display_on and datetime.today().hour >= TIME_TURN_OFF_SCREEN and ENABLE_OF_OFF_SCREEN:
             self.turn_off()
             self.display_on = self.display_status()
         logging.debug("Completed updating %s..." % self.__class__.__name__)
