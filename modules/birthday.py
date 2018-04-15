@@ -3,11 +3,8 @@ import logging
 import os
 from datetime import datetime, date
 from threading import Thread
-from time import sleep
 
 from modules.base import BaseModule
-
-logging.basicConfig(format='%(asctime)s;%(levelname)s;%(message)s', level=logging.INFO)
 
 
 class Birthday(BaseModule):
@@ -27,7 +24,7 @@ class Birthday(BaseModule):
             for event in self.upcoming_birthdays:
                 self.data.append(event)
             logging.debug("Completed updating %s..." % self.__class__.__name__)
-            sleep(0.100)
+            self.sleep(3600)
 
     @property
     def header(self):
@@ -37,7 +34,7 @@ class Birthday(BaseModule):
 
     @property
     def delimiter(self):
-        surface = self.font('light', 0.045).render('-'*20, True, self.color)
+        surface = self.font('light', 0.045).render('-' * 20, True, self.color)
         position = surface.get_rect(left=self.width / 100, top=200)
         return surface, position
 

@@ -5,8 +5,6 @@ from time import sleep
 
 from modules.base import BaseModule
 
-logging.basicConfig(format='%(asctime)s;%(levelname)s;%(message)s', level=logging.INFO)
-
 
 class Clock(BaseModule):
     def __init__(self):
@@ -16,7 +14,6 @@ class Clock(BaseModule):
         self.tmp_data = []
 
     def update(self):
-        """Returns updated weather display"""
         while not self.shutdown:
             self.tmp_data.append(self.date)
             self.tmp_data.append(self.time)
@@ -24,7 +21,7 @@ class Clock(BaseModule):
             self.data = []
             self.data = self.tmp_data[:]
             self.tmp_data.clear()
-            logging.debug("Completed updating clock...")
+            logging.debug("Completed updating %s..." % self.__class__.__name__)
             sleep(1)
 
     @property

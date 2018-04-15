@@ -7,8 +7,6 @@ import vasttrafik
 from modules.base import BaseModule
 from settings import vasttrafik_key, vasttrafik_secret, buss_stops, skip_directions
 
-logging.basicConfig(format='%(asctime)s;%(levelname)s;%(message)s', level=logging.INFO)
-
 
 class Vasttrafik(BaseModule):
     def __init__(self):
@@ -28,8 +26,8 @@ class Vasttrafik(BaseModule):
             self.data.clear()
             self.data = self.tmp_data[:]
             self.tmp_data.clear()
-            logging.debug("Completed updating vasttrafik")
-            self._sleep()
+            logging.debug("Completed updating %s..." % self.__class__.__name__)
+            self.sleep(60)
 
     def update_departures(self, buss_stop):
         self.top += 20

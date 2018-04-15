@@ -10,8 +10,6 @@ import pygame
 from modules.base import BaseModule
 from settings import COLORS, open_weather_token, weather_country, weather_city
 
-logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
-
 
 class Weather(BaseModule):
     def __init__(self):
@@ -35,9 +33,8 @@ class Weather(BaseModule):
                 self.data.append(self.description)
                 self.data.append(self.city)
 
-            logging.debug("Completed updating weather...")
-
-            self._sleep()
+            logging.debug("Completed updating %s..." % self.__class__.__name__)
+            self.sleep(300)
 
     def fetch_forecast(self):
         try:
@@ -92,6 +89,7 @@ class Weather(BaseModule):
     @property
     def condition(self):
         icon_name = self.icon_mapping[str(self.weather_data['weather'][0]['id'])]['icon']
+        icon_name = 'cloudy'
         surface = pygame.image.load(os.path.join('resources', 'icons', '%s.png' % icon_name))
         position = surface.get_rect(left=self.width / 8, top=30)
         return surface, position

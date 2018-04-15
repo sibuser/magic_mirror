@@ -8,8 +8,6 @@ import pygame
 
 from settings import FONTS, COLORS
 
-logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
-
 
 class BaseModule(object):
     def __init__(self):
@@ -21,13 +19,13 @@ class BaseModule(object):
     def font(self, name, scale):
         return pygame.font.Font(FONTS[name], int(scale * self.height))
 
-    def _sleep(self):
+    def sleep(self, max_sleep_sec=1):
         """Custom sleep method to support keyboard interruptions"""
-        tick = 0.0
-        step = 0.1
-        while tick <= 60 and not self.shutdown:
-            tick += step
-            sleep(step)
+        slept_sec = 0
+        sleep_step_sec = 1
+        while slept_sec <= max_sleep_sec and not self.shutdown:
+            slept_sec += sleep_step_sec
+            sleep(sleep_step_sec)
 
     def start(self):
         logging.info('Started "%s" thread' % self.__class__.__name__)
