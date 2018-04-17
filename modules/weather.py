@@ -117,7 +117,7 @@ class Weather(BaseModule):
         self.new_data.append((surface, position))
 
         surface = pygame.image.load(os.path.join('resources', 'icons', 'sunset.png'))
-        surface = pygame.transform.scale(surface, (int(self.width * 0.035), int(self.width * 0.035)))
+        surface = pygame.transform.scale(surface, (int(self.width * 0.025), int(self.width * 0.025)))
         position = surface.get_rect(left=self.width / 1.08, top=self.height * 0.18)
         self.new_data.append((surface, position))
 
@@ -128,6 +128,6 @@ class Weather(BaseModule):
         self.new_data.append((surface, position))
 
         surface = pygame.image.load(os.path.join('resources', 'icons', 'sunrise.png'))
-        surface = pygame.transform.scale(surface, (int(self.width * 0.03), int(self.width * 0.03)))
+        surface = pygame.transform.scale(surface, (int(self.width * 0.02), int(self.width * 0.02)))
         position = surface.get_rect(left=self.width / 1.22, top=self.height * 0.18)
         self.new_data.append((surface, position))
