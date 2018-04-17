@@ -59,7 +59,7 @@ def main(fullscreen, resolution):
         # Check if vcgencmd is installed, to see if it is running on a
         # raspberry pi with the requires software installed
         call("vcgencmd")
-        modules.append(DisplayOnOff())
+        # modules.append(DisplayOnOff())
     except FileNotFoundError:
         pass
 
