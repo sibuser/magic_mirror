@@ -52,7 +52,7 @@ def main(fullscreen, resolution):
         Weather(),
         Clock(),
         # Birthday(),
-        Currency(),
+        # Currency(),
         Vasttrafik()
     ]
     try:

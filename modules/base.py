@@ -12,10 +12,6 @@ class BaseModule(object):
         self.shutdown = False
         self.thread = None
         self.color = COLORS['white']
-        self.time_pos = 0
-        self.time_scale = 0.15
-        self.date_pos = 0.18
-        self.date_scale = 0.045
 
     def font(self, name, scale):
         return pygame.font.Font(FONTS[name], int(scale * self.height))

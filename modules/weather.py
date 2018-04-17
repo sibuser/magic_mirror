@@ -113,21 +113,21 @@ class Weather(BaseModule):
     def show_sunset(self):
         sunset = datetime.fromtimestamp(self.weather_data['sys']['sunset']).strftime("%H:%M")
         surface = self.font('regular', 0.035).render(sunset, True, self.color)
-        position = surface.get_rect(left=self.width / 1.185, top=self.height * 0)
+        position = surface.get_rect(left=self.width / 1.165, top=self.height * 0.18)
         self.new_data.append((surface, position))
 
         surface = pygame.image.load(os.path.join('resources', 'icons', 'sunset.png'))
         surface = pygame.transform.scale(surface, (int(self.width * 0.035), int(self.width * 0.035)))
-        position = surface.get_rect(left=self.width / 1.1, top=self.height * 0)
+        position = surface.get_rect(left=self.width / 1.08, top=self.height * 0.18)
         self.new_data.append((surface, position))
 
     def show_sunrise(self):
         sunrise = datetime.fromtimestamp(self.weather_data['sys']['sunrise']).strftime("%H:%M")
         surface = self.font('regular', 0.035).render(sunrise, True, self.color)
-        position = surface.get_rect(left=self.width / 1.425, top=self.height * 0)
+        position = surface.get_rect(left=self.width / 1.329, top=self.height * 0.18)
         self.new_data.append((surface, position))
 
         surface = pygame.image.load(os.path.join('resources', 'icons', 'sunrise.png'))
         surface = pygame.transform.scale(surface, (int(self.width * 0.03), int(self.width * 0.03)))
-        position = surface.get_rect(left=self.width / 1.3, top=self.height * 0)
+        position = surface.get_rect(left=self.width / 1.22, top=self.height * 0.18)
         self.new_data.append((surface, position))
