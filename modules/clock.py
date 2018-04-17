@@ -17,32 +17,30 @@ class Clock(BaseModule):
         self.date_scale = 0.035
 
         self.data = []
-        self.tmp_data = []
+        self.new_data = []
 
     def update(self):
         while not self.shutdown:
-            self.tmp_data.append(self.date)
-            self.tmp_data.append(self.time)
+            self.show_time()
+            self.show_date()
 
             self.data = []
-            self.data = self.tmp_data[:]
-            self.tmp_data.clear()
+            self.data = self.new_data[:]
+            self.new_data.clear()
             logging.debug("Completed updating %s..." % self.__class__.__name__)
             sleep(CLOCK_UPDATE_DELAY)
 
-    @property
-    def time(self):
+    def show_time(self):
         current_time = datetime.today().strftime("%H:%M")
         surface = self.font('light', self.time_scale).render(current_time, True, self.color)
         position = surface.get_rect(left=self.width / 1.275, top=self.height * self.time_pos)
-        return surface, position
+        self.new_data.append((surface, position))
 
-    @property
-    def date(self):
+    def show_date(self):
         today = datetime.today()
         text = '{weekday}, {month} {day}'.format(weekday='Saturday',
                                                  month=today.strftime('%B'),
                                                  day=today.day)
         surface = self.font('light', self.date_scale).render(text, True, self.color)
         position = surface.get_rect(left=self.width / 1.3, top=self.height * self.date_pos)
-        return surface, position
+        self.new_data.append((surface, position))

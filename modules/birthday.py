@@ -20,27 +20,24 @@ class Birthday(BaseModule):
             with open(os.path.join('resources', 'birthdays.json')) as f:
                 self.birthdays = json.loads(f.read())
 
-            self.data.append(self.header)
-            self.data.append(self.delimiter)
-            for event in self.upcoming_birthdays:
+            self.data.append(self.show_header())
+            self.data.append(self.show_delimiter())
+            for event in self.show_upcoming_birthdays():
                 self.data.append(event)
             logging.debug("Completed updating %s..." % self.__class__.__name__)
             self.sleep(BIRTHDAY_UPDATE_DELAY)
 
-    @property
-    def header(self):
+    def show_header(self):
         surface = self.font('light', 0.035).render('Upcoming Birthdays', True, self.color)
         position = surface.get_rect(left=self.width / 100, top=180)
         return surface, position
 
-    @property
-    def delimiter(self):
+    def show_delimiter(self):
         surface = self.font('light', 0.045).render('-' * 20, True, self.color)
         position = surface.get_rect(left=self.width / 100, top=200)
         return surface, position
 
-    @property
-    def upcoming_birthdays(self):
+    def show_upcoming_birthdays(self):
         top = 220
         for brth_as_str in self.get_events():
             surface = self.font('regular', 0.035).render(brth_as_str, True, self.color)
