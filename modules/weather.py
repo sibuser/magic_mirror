@@ -6,6 +6,7 @@ from urllib.error import HTTPError
 from urllib.request import urlopen
 
 import pygame
+from datetime import datetime
 
 from modules.base import BaseModule
 from settings import COLORS, WEATHER_API_TOKEN, WEATHER_COUNTRY, WEATHER_CITY, FIVE_MINUTES
@@ -18,6 +19,7 @@ class Weather(BaseModule):
         self.thread = Thread(target=self.update)
         self.weather_data = None
         self.data = []
+        self.new_data = []
         with open(os.path.join('resources', 'icon_map.json')) as f:
             self.icon_mapping = json.loads(f.read())
 
@@ -26,13 +28,17 @@ class Weather(BaseModule):
             self.fetch_forecast()
             self.data = []
             if not self.weather_data:
-                self.data.append(self.empty_forecast)
+                self.show_empty_forecast()
             else:
-                self.data.append(self.temp)
-                self.data.append(self.condition)
-                self.data.append(self.description)
-                self.data.append(self.city)
-
+                self.show_temp()
+                self.show_condition()
+                self.show_description()
+                self.show_city()
+                self.show_sunrise()
+                self.show_sunset()
+            self.data.clear()
+            self.data = self.new_data[:]
+            self.new_data.clear()
             logging.debug("Completed updating %s..." % self.__class__.__name__)
             self.sleep(FIVE_MINUTES)
 
@@ -73,46 +79,55 @@ class Weather(BaseModule):
         #                      "id": 2711537, "name": "Gothenburg",
         #                      "cod": 200}
 
-    @property
-    def empty_forecast(self):
+    def show_empty_forecast(self):
         surface = self.font('light', 0.045).render('Filed to fetch forecast', True, COLORS['red'])
         position = surface.get_rect(left=self.width / 100, top=self.height * 0.01)
         return surface, position
 
-    @property
-    def temp(self):
+    def show_temp(self):
         temp = '%d\u00b0' % (self.weather_data['main']['temp'] - 273.15)
         surface = self.font('light', 0.15).render(temp, True, self.color)
         position = surface.get_rect(left=0, top=0)
-        return surface, position
+        self.new_data.append((surface, position))
 
-    @property
-    def condition(self):
+    def show_condition(self):
         icon_name = self.icon_mapping[str(self.weather_data['weather'][0]['id'])]['icon']
         icon_name = '056-cloudy'
         surface = pygame.image.load(os.path.join('resources', 'icons', '%s.png' % icon_name))
         surface = pygame.transform.scale(surface, (int(self.width * 0.07), int(self.width * 0.07)))
         position = surface.get_rect(left=self.width / 8, top=self.height * 0.04)
-        return surface, position
+        self.new_data.append((surface, position))
 
-    @property
-    def description(self):
+    def show_description(self):
         desc = self.weather_data['weather'][0]['description'].title()
         surface = self.font('regular', 0.045).render(desc, True, self.color)
         position = surface.get_rect(left=self.width / 100, top=self.height * 0.19)
-        return surface, position
+        self.new_data.append((surface, position))
 
-    @property
-    def city(self):
+    def show_city(self):
         city_name = self.weather_data['name']
         surface = self.font('light', 0.035).render(city_name, True, self.color)
         position = surface.get_rect(left=self.width / 100, top=self.height * 0.25)
-        return surface, position
+        self.new_data.append((surface, position))
 
-    @property
-    def sunset(self):
-        pass
+    def show_sunset(self):
+        sunset = datetime.fromtimestamp(self.weather_data['sys']['sunset']).strftime("%H:%M")
+        surface = self.font('regular', 0.035).render(sunset, True, self.color)
+        position = surface.get_rect(left=self.width / 1.185, top=self.height * 0)
+        self.new_data.append((surface, position))
 
-    @property
-    def sunrise(self):
-        pass
+        surface = pygame.image.load(os.path.join('resources', 'icons', 'sunset.png'))
+        surface = pygame.transform.scale(surface, (int(self.width * 0.035), int(self.width * 0.035)))
+        position = surface.get_rect(left=self.width / 1.1, top=self.height * 0)
+        self.new_data.append((surface, position))
+
+    def show_sunrise(self):
+        sunrise = datetime.fromtimestamp(self.weather_data['sys']['sunrise']).strftime("%H:%M")
+        surface = self.font('regular', 0.035).render(sunrise, True, self.color)
+        position = surface.get_rect(left=self.width / 1.425, top=self.height * 0)
+        self.new_data.append((surface, position))
+
+        surface = pygame.image.load(os.path.join('resources', 'icons', 'sunrise.png'))
+        surface = pygame.transform.scale(surface, (int(self.width * 0.03), int(self.width * 0.03)))
+        position = surface.get_rect(left=self.width / 1.3, top=self.height * 0)
+        self.new_data.append((surface, position))
