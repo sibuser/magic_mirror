@@ -91,8 +91,8 @@ class Weather(BaseModule):
         self.new_data.append((surface, position))
 
     def show_condition(self):
-        icon_name = self.icon_mapping[str(self.weather_data['weather'][0]['id'])]['icon']
-        icon_name = '056-cloudy'
+        condition = str(self.weather_data['weather'][0]['id'])
+        icon_name = self.icon_mapping.get(condition, 'sunny')['icon']
         surface = pygame.image.load(os.path.join('resources', 'icons', '%s.png' % icon_name))
         surface = pygame.transform.scale(surface, (int(self.width * 0.07), int(self.width * 0.07)))
         position = surface.get_rect(left=self.width / 8, top=self.height * 0.04)
