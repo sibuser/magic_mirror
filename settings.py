@@ -15,6 +15,8 @@ TEN_MS = 10
 
 MOUSE_VISIBLE = False
 
+CALENDAR_ID = environ.get('CALENDAR_ID')
+
 WEATHER_API_TOKEN = environ.get('OPEN_WEATHER_TOKEN')
 WEATHER_CITY = 'Gothenburg'
 WEATHER_COUNTRY = 'se'
