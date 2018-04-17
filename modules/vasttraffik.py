@@ -34,7 +34,7 @@ class Vasttrafik(BaseModule):
             self.sleep(VASTTRAFIK_UPDATE_DELAY)
 
     def update_departures(self, buss_stop):
-        self.traffic_top += 0.042
+        self.move_down()
         buss_stop_id = self.jp.location_name(buss_stop)[0]['id']
 
         self.show_stop_name(buss_stop)
@@ -80,7 +80,7 @@ class Vasttrafik(BaseModule):
         self.new_data.append((surface, position))
 
     def move_down(self):
-        self.traffic_top += 0.042
+        self.traffic_top += 0.032
 
 
 def skip_direction(departures):
