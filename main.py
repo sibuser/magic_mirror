@@ -12,9 +12,9 @@ from modules.currency import Currency
 from modules.vasttraffik import Vasttrafik
 from modules.weather import Weather
 from modules.display_control import DisplayOnOff
-
 from settings import MOUSE_VISIBLE, COLORS, KEY_DOWN, KEY_ESCAPE, KEY_WINDOW_X, TEN_MS
 
+logging.getLogger('googleapicliet.discovery_cache').setLevel(logging.ERROR)
 logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s', datefmt='%H:%M:%S',
                     level=logging.DEBUG)
 
@@ -32,7 +32,7 @@ def check_if_exit():
               default=False,
               help='Run in full screen mode', is_flag=True)
 @click.option('--resolution', '-r',
-              default=(640, 480),
+              default=(1080, 1920),
               type=(int, int),
               help='Window size width height')
 def main(fullscreen, resolution):

@@ -17,12 +17,12 @@ class Vasttrafik(BaseModule):
         self.jp = vasttrafik.JournyPlanner(key=VASTTRAFIK_KEY, secret=VASTTRAFIK_SECRET)
         self.data = []
         self.new_data = []
-        self.traffic_scale = 0.025
-        self.traffic_top = 0.26
+        self.traffic_scale = 0.015
+        self.traffic_top = None
 
     def update(self):
         while not self.shutdown:
-            self.traffic_top = 0.26
+            self.traffic_top = 0.4
 
             for stop in BUSS_STOPS:
                 self.update_departures(stop)
@@ -48,39 +48,38 @@ class Vasttrafik(BaseModule):
 
             self.show_buss_number(departure)
             self.show_destination(departure)
-            self.show_departure_time(departure, 1.09)
+            self.show_departure_time(departure, 0.62)
 
             if len(departures) > 1:
-                self.show_departure_time(departures[1], 1.05)
+                self.show_departure_time(departures[1], 0.66)
             self.move_down()
 
-    def show_departure_time(self, departure, left):
-        arrive_in = calc_depart_time_in_min(departure)
-        msg = '{time}'.format(time=arrive_in)
-        surface = self.font('light', self.traffic_scale).render(msg, True, self.color)
-        position = surface.get_rect(left=self.width / left, top=self.height * self.traffic_top)
-        self.new_data.append((surface, position))
-
-    def show_destination(self, departure):
-        msg = '{direction}'.format(**departure)
-        surface = self.font('light', self.traffic_scale).render(msg, True, self.color)
-        position = surface.get_rect(left=self.width / 1.32, top=self.height * self.traffic_top)
+    def show_stop_name(self, buss_stop):
+        msg = '{stop}'.format(stop=buss_stop)
+        surface = self.font('regular', self.traffic_scale).render(msg, True, self.color)
+        position = surface.get_rect(left=self.width * 0.4, top=self.height * self.traffic_top)
         self.new_data.append((surface, position))
 
     def show_buss_number(self, departure):
         msg = '{sname}'.format(**departure)
         surface = self.font('light', self.traffic_scale).render(msg, True, self.color)
-        position = surface.get_rect(left=self.width / 1.4, top=self.height * self.traffic_top)
+        position = surface.get_rect(left=self.width * 0.345, top=self.height * self.traffic_top)
         self.new_data.append((surface, position))
 
-    def show_stop_name(self, buss_stop):
-        msg = '{stop}'.format(stop=buss_stop)
-        surface = self.font('regular', self.traffic_scale).render(msg, True, self.color)
-        position = surface.get_rect(left=self.width / 1.3, top=self.height * self.traffic_top)
+    def show_destination(self, departure):
+        msg = '{direction}'.format(**departure)
+        surface = self.font('light', self.traffic_scale).render(msg, True, self.color)
+        position = surface.get_rect(left=self.width * 0.4, top=self.height * self.traffic_top)
+        self.new_data.append((surface, position))
+
+    def show_departure_time(self, departure, left):
+        msg = '{depart_in}'.format(**departure)
+        surface = self.font('light', self.traffic_scale).render(msg, True, self.color)
+        position = surface.get_rect(left=self.width * left, top=self.height * self.traffic_top)
         self.new_data.append((surface, position))
 
     def move_down(self):
-        self.traffic_top += 0.032
+        self.traffic_top += 0.016
 
 
 def skip_direction(departures):
@@ -90,8 +89,10 @@ def skip_direction(departures):
 def group_board_by_direction(departures):
     grouped_directions = defaultdict(list)
     for departure in departures:
-        if calc_depart_time_in_min(departure) > 50:
+        depart_time_in = calc_depart_time_in_min(departure)
+        if depart_time_in > 50 or depart_time_in < 1:
             continue
+        departure['depart_in'] = depart_time_in
         grouped_directions[departure['direction']].append(departure)
     return grouped_directions
 

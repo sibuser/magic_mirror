@@ -1,4 +1,3 @@
-import datetime
 import logging
 from datetime import datetime
 from threading import Thread
@@ -18,8 +17,8 @@ class Birthday(BaseModule):
         self.thread = Thread(target=self.update)
         self.data = []
         self.new_data = []
-        self.event_padding = 0.03
-        self.position_top = 0.3
+        self.event_padding = None
+        self.position_top = None
 
         # Setup the Calendar API
         scopes = 'https://www.googleapis.com/auth/calendar.readonly'
@@ -33,8 +32,8 @@ class Birthday(BaseModule):
     def update(self):
 
         while not self.shutdown:
-            self.event_padding = 0.03
-            self.position_top = 0.3
+            self.event_padding = 0.012
+            self.position_top = 0.8
             events = self.fetch_upcoming_event()
 
             self.show_header()
@@ -55,26 +54,31 @@ class Birthday(BaseModule):
         self.position_top += self.event_padding
 
     def show_header(self):
-        surface = self.font('regular', 0.025).render('Upcoming Birthdays', True, self.color)
+        surface = self.font('regular', 0.008).render('Birthdays:', True, self.color)
         position = surface.get_rect(left=self.width / 100, top=self.height * self.position_top)
         self.new_data.append((surface, position))
 
     def show_date(self, event):
-        start = event['start'].get('dateTime', event['start'].get('date'))
-        surface = self.font('regular', 0.025).render(parser.parse(start).strftime("%d %B"), True,
-                                                     self.color)
+        start = parser.parse(event['start'].get('dateTime', event['start'].get('date')))
+        today = datetime.today().day
+        if start.day - today == 0:
+            msg = 'Today'
+        elif start.day - today == 1:
+            msg = 'Tomorrow'
+        else:
+            msg = start.strftime("%d %B")
+        surface = self.font('regular', 0.01).render(msg, True, self.color)
         position = surface.get_rect(left=self.width / 100, top=self.height * self.position_top)
         self.new_data.append((surface, position))
 
     def show_summary(self, event):
-        surface = self.font('regular', 0.025).render(event['summary'], True,
-                                                     self.color)
+        surface = self.font('regular', 0.01).render(event['summary'], True, self.color)
         position = surface.get_rect(left=self.width / 10, top=self.height * self.position_top)
         self.new_data.append((surface, position))
 
     def fetch_upcoming_event(self):
         # Call the Calendar API
-        now = datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
+        now = datetime.utcnow().replace(hour=1, minute=0).isoformat() + 'Z'
         events_result = self.service.events().list(calendarId=CALENDAR_ID,
                                                    timeMin=now,
                                                    maxResults=10,
