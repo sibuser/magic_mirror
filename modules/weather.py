@@ -32,7 +32,6 @@ class Weather(BaseModule):
             self.weather_data = self.fetch_weather(self.weather_url)
             self.forecast_data = self.fetch_weather(self.forecast_url)
 
-            self.data = []
             if not self.weather_data:
                 self.show_empty_forecast()
             else:
@@ -43,6 +42,7 @@ class Weather(BaseModule):
                 self.show_sunrise()
                 self.show_sunset()
                 self.show_forecast()
+            self.data.clear()
             self.data = self.new_data[:]
             self.new_data.clear()
             logging.debug("Completed updating %s..." % self.__class__.__name__)

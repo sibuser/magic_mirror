@@ -27,7 +27,6 @@ class Clock(BaseModule):
             self.data = []
             self.data = self.new_data[:]
             self.new_data.clear()
-            logging.debug("Completed updating %s..." % self.__class__.__name__)
             sleep(CLOCK_UPDATE_DELAY)
 
     def show_time(self):

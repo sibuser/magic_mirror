@@ -1,17 +1,16 @@
 #!/usr/bin/env python3
 
 import logging
+from subprocess import call
 
 import click
 import pygame
-from subprocess import call
 
 from modules.birthday import Birthday
 from modules.clock import Clock
 from modules.currency import Currency
 from modules.vasttraffik import Vasttrafik
 from modules.weather import Weather
-from modules.display_control import DisplayOnOff
 from settings import MOUSE_VISIBLE, COLORS, KEY_DOWN, KEY_ESCAPE, KEY_WINDOW_X, TEN_MS
 
 logging.getLogger('googleapicliet.discovery_cache').setLevel(logging.ERROR)
@@ -66,7 +65,6 @@ def main(fullscreen, resolution):
     for module in modules:
         module.start()
 
-    game_clock = pygame.time.Clock()
     pygame.mouse.set_visible(MOUSE_VISIBLE)
     try:
         while True:
@@ -80,7 +78,6 @@ def main(fullscreen, resolution):
             if check_if_exit():
                 return
             pygame.time.wait(TEN_MS)
-            game_clock.tick(TEN_MS)
     finally:
 
         logging.info('Stopping all threads')
