@@ -7,6 +7,7 @@ import click
 import pygame
 
 from modules.birthday import Birthday
+from modules.calendar import Calendar
 from modules.clock import Clock
 from modules.currency import Currency
 from modules.vasttraffik import Vasttrafik
@@ -52,7 +53,8 @@ def main(fullscreen, resolution):
         Clock(),
         Birthday(),
         Currency(),
-        Vasttrafik()
+        Calendar(),
+        Vasttrafik(),
     ]
     try:
         # Check if vcgencmd is installed, to see if it is running on a

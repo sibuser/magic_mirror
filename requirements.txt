@@ -4,3 +4,4 @@ vtjp==0.1.14
 python-dotenv==0.8.2
 google-api-python-client
 python-dateutil
+workalendar==2.3.1
