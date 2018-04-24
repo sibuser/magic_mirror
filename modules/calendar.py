@@ -54,6 +54,21 @@ class Calendar(BaseModule):
             if holiday[0].month == today.month:
                 current_month_holidays.append(holiday[0].day)
 
+        if today.month == 1:
+            previous_month = calendar.monthcalendar(today.year - 1, 12)
+        else:
+            previous_month = calendar.monthcalendar(today.year, today.month - 1)
+
+        for index, day in enumerate(previous_month[4]):
+            if day:
+                surface = self.font('regular', calendar_scale).render(str(day), True,
+                                                                      COLORS['gray'])
+                position = surface.get_rect(left=self.width * calendar_day_pos_left,
+                                            top=self.height * calendar_week_pos_top)
+                self.new_data.append((surface, position))
+            calendar_day_pos_left += 0.03
+        calendar_day_pos_left = 0.75
+
         for week in calendar.monthcalendar(today.year, today.month):
             for index, day in enumerate(week):
                 if day:
@@ -69,6 +84,21 @@ class Calendar(BaseModule):
                 calendar_day_pos_left += 0.03
             calendar_day_pos_left = 0.75
             calendar_week_pos_top += 0.015
+
+        if today.month == 12:
+            next_month = calendar.monthcalendar(today.year + 1, 1)
+        else:
+            next_month = calendar.monthcalendar(today.year, today.month + 1)
+
+        calendar_week_pos_top -= 0.015
+        for index, day in enumerate(next_month[0]):
+            if day:
+                surface = self.font('regular', calendar_scale).render(str(day), True,
+                                                                      COLORS['gray'])
+                position = surface.get_rect(left=self.width * calendar_day_pos_left,
+                                            top=self.height * calendar_week_pos_top)
+                self.new_data.append((surface, position))
+            calendar_day_pos_left += 0.03
 
     def show_holidays(self):
         holiday_name_scale = 0.01
