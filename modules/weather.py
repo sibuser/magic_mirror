@@ -47,6 +47,7 @@ class Weather(BaseModule):
             self.new_data.clear()
             logging.debug("Completed updating %s..." % self.__class__.__name__)
             self.sleep(FIVE_MINUTES)
+        logging.info('Stopped %s...' % self.__class__.__name__)
 
     def fetch_weather(self, url):
         try:

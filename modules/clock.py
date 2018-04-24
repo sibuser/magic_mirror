@@ -1,7 +1,6 @@
 import logging
 from datetime import datetime
 from threading import Thread
-from time import sleep
 
 from modules.base import BaseModule
 from settings import CLOCK_UPDATE_DELAY
@@ -27,7 +26,8 @@ class Clock(BaseModule):
             self.data = []
             self.data = self.new_data[:]
             self.new_data.clear()
-            sleep(CLOCK_UPDATE_DELAY)
+            self.sleep(CLOCK_UPDATE_DELAY)
+        logging.info('Stopped %s...' % self.__class__.__name__)
 
     def show_time(self):
         current_time = datetime.today().strftime("%H:%M")

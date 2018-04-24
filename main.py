@@ -16,7 +16,11 @@ from settings import MOUSE_VISIBLE, COLORS, KEY_DOWN, KEY_ESCAPE, KEY_WINDOW_X, 
 
 logging.getLogger('googleapicliet.discovery_cache').setLevel(logging.ERROR)
 logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s', datefmt='%H:%M:%S',
-                    level=logging.DEBUG)
+                    level=logging.DEBUG,
+                    handlers=[
+                        logging.FileHandler("{0}/{1}.log".format('.', 'magic.log')),
+                        logging.StreamHandler()
+                    ])
 
 
 def check_if_exit():

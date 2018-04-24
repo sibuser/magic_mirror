@@ -32,6 +32,7 @@ class Vasttrafik(BaseModule):
             self.new_data.clear()
             logging.debug("Completed updating %s..." % self.__class__.__name__)
             self.sleep(VASTTRAFIK_UPDATE_DELAY)
+        logging.info('Stopped %s...' % self.__class__.__name__)
 
     def update_departures(self, buss_stop):
         self.move_down()

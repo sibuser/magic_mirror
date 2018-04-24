@@ -21,6 +21,7 @@ class Currency(BaseModule):
             self.new_data.clear()
             logging.debug("Completed updating %s..." % self.__class__.__name__)
             self.sleep(CURRENCY_UPDATE_DELAY)
+        logging.info('Stopped %s...' % self.__class__.__name__)
 
     def show_rate(self):
         ecb_url = 'http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml'

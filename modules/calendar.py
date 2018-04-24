@@ -1,11 +1,12 @@
 import calendar
+import logging
 from datetime import datetime
 from threading import Thread
-from time import sleep
+
+from workalendar.europe import Sweden
 
 from modules.base import BaseModule
 from settings import COLORS, CALENDAR_UPDATE_DELAY
-from workalendar.europe import Sweden
 
 
 class Calendar(BaseModule):
@@ -26,7 +27,8 @@ class Calendar(BaseModule):
             self.data = []
             self.data = self.new_data[:]
             self.new_data.clear()
-            sleep(CALENDAR_UPDATE_DELAY)
+            self.sleep(CALENDAR_UPDATE_DELAY)
+        logging.info('Stopped %s...' % self.__class__.__name__)
 
     def show_week_header(self):
         week_header_pos_left = 0.74
@@ -79,16 +81,16 @@ class Calendar(BaseModule):
         today = datetime.today()
         for holiday in self.holidays:
             if holiday[0].month == today.month:
-                surface = self.font('regular', holiday_name_scale).render(holiday[1], True, self.color)
+                surface = self.font('regular', holiday_name_scale).render(holiday[1], True,
+                                                                          self.color)
                 position = surface.get_rect(left=self.width * holiday_name_pos_left,
                                             top=self.height * holiday_name_pos_top)
                 self.new_data.append((surface, position))
 
-                surface = self.font('regular', holiday_name_scale).render(str(holiday[0].day), True, self.color)
+                surface = self.font('regular', holiday_name_scale).render(str(holiday[0].day), True,
+                                                                          self.color)
                 position = surface.get_rect(left=self.width * holiday_date_pos_left,
                                             top=self.height * holiday_date_pos_top)
                 self.new_data.append((surface, position))
                 holiday_date_pos_top += 0.015
                 holiday_name_pos_top += 0.015
-
-

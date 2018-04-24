@@ -49,6 +49,7 @@ class Birthday(BaseModule):
 
             logging.debug("Completed updating %s..." % self.__class__.__name__)
             self.sleep(BIRTHDAY_UPDATE_DELAY)
+        logging.info('Stopped %s...' % self.__class__.__name__)
 
     def move_down(self):
         self.position_top += self.event_padding
