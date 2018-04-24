@@ -38,7 +38,7 @@ class Birthday(BaseModule):
 
             self.show_header()
             self.move_down()
-            for event in events:
+            for event in self.only_current_month(events):
                 self.show_date(event)
                 self.show_summary(event)
                 self.move_down()
@@ -50,6 +50,14 @@ class Birthday(BaseModule):
             logging.debug("Completed updating %s..." % self.__class__.__name__)
             self.sleep(BIRTHDAY_UPDATE_DELAY)
         logging.info('Stopped %s...' % self.__class__.__name__)
+
+    def only_current_month(self, events):
+        today = datetime.today()
+
+        for event in events:
+            start = parser.parse(event['start'].get('dateTime', event['start'].get('date')))
+            if start.month == today.month:
+                yield event
 
     def move_down(self):
         self.position_top += self.event_padding
