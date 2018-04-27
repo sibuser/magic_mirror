@@ -14,7 +14,6 @@ class Vasttrafik(BaseModule):
     def __init__(self):
         super().__init__()
         self.thread = Thread(target=self.update)
-        self.jp = vasttrafik.JournyPlanner(key=VASTTRAFIK_KEY, secret=VASTTRAFIK_SECRET)
         self.data = []
         self.new_data = []
         self.traffic_scale = 0.015
@@ -36,12 +35,13 @@ class Vasttrafik(BaseModule):
 
     def update_departures(self, buss_stop):
         self.move_down()
-        buss_stop_id = self.jp.location_name(buss_stop)[0]['id']
+        jp = vasttrafik.JournyPlanner(key=VASTTRAFIK_KEY, secret=VASTTRAFIK_SECRET)
+        buss_stop_id = jp.location_name(buss_stop)[0]['id']
 
         self.show_stop_name(buss_stop)
         self.move_down()
 
-        for departures in group_board_by_direction(self.jp.departureboard(buss_stop_id)).values():
+        for departures in group_board_by_direction(jp.departureboard(buss_stop_id)).values():
             if skip_direction(departures):
                 continue
 
@@ -49,8 +49,8 @@ class Vasttrafik(BaseModule):
 
             self.show_buss_number(departure)
             self.show_destination(departure)
-            self.show_departure_time(departure, 0.62)
 
+            self.show_departure_time(departure, 0.62)
             if len(departures) > 1:
                 self.show_departure_time(departures[1], 0.66)
             self.move_down()
