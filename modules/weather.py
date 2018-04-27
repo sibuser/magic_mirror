@@ -1,7 +1,7 @@
 import json
 import logging
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 from threading import Thread
 from urllib.error import HTTPError
 from urllib.request import urlopen
@@ -146,10 +146,10 @@ class Weather(BaseModule):
 
     def show_forecast(self):
         tmp = []
-        today = datetime.today()
-        tomorrow = datetime.today().replace(day=today.day + 1, hour=9, minute=0, second=0, microsecond=0)
-        after_tomorrow = datetime.today().replace(day=today.day + 2, hour=9, minute=0, second=0, microsecond=0)
-        feature = datetime.today().replace(day=today.day + 3, hour=9, minute=0, second=0, microsecond=0)
+        today = datetime.today().replace(hour=9, minute=0, second=0, microsecond=0)
+        tomorrow = today + timedelta(days=1)
+        after_tomorrow = today + timedelta(days=2)
+        feature = today + timedelta(days=3)
         for forecast in self.forecast_data['list']:
             dt = parser.parse(forecast['dt_txt'])
             if dt == tomorrow or dt == after_tomorrow or dt == feature:
@@ -176,6 +176,4 @@ class Weather(BaseModule):
             self.new_data.append((surface, position))
 
             init_pos += 0.04
-
-        pass
 
