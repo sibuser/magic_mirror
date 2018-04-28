@@ -35,9 +35,12 @@ class Vasttrafik(BaseModule):
 
     def update_departures(self, buss_stop):
         self.move_down()
-        jp = vasttrafik.JournyPlanner(key=VASTTRAFIK_KEY, secret=VASTTRAFIK_SECRET)
-        buss_stop_id = jp.location_name(buss_stop)[0]['id']
-
+        try:
+            jp = vasttrafik.JournyPlanner(key=VASTTRAFIK_KEY, secret=VASTTRAFIK_SECRET, expiery=5)
+            buss_stop_id = jp.location_name(buss_stop)[0]['id']
+        except Exception as e:
+            logging.error(e)
+            raise e
         self.show_stop_name(buss_stop)
         self.move_down()
 
