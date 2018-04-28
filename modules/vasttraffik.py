@@ -79,11 +79,11 @@ class Vasttrafik(BaseModule):
     def show_departure_time(self, departure, left):
         depart_in = departure['depart_in']
         color = COLORS['white']
-        if 7 < depart_in < 12:
+        if 10 < depart_in < 15:
             color = COLORS['green']
-        if 5 < depart_in < 7:
+        if 8 < depart_in < 10:
             color = COLORS['yellow']
-        if depart_in < 5:
+        if depart_in < 6:
             color = COLORS['red']
 
         surface = self.font('light', self.traffic_scale).render(str(depart_in), True, color)
@@ -102,10 +102,9 @@ def group_board_by_direction(departures):
     grouped_directions = defaultdict(list)
     for departure in departures:
         depart_time_in = calc_depart_time_in_min(departure)
-        if depart_time_in > 50 or depart_time_in < 1:
-            continue
-        departure['depart_in'] = depart_time_in
-        grouped_directions[departure['direction']].append(departure)
+        if 3 < depart_time_in < 50:
+            departure['depart_in'] = depart_time_in
+            grouped_directions[departure['direction']].append(departure)
     return grouped_directions
 
 
