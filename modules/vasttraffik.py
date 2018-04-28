@@ -13,7 +13,7 @@ from settings import VASTTRAFIK_KEY, VASTTRAFIK_SECRET, BUSS_STOPS, VASTTRAFIK_U
 class Vasttrafik(BaseModule):
     def __init__(self):
         super().__init__()
-        self.thread = Thread(target=self.update)
+        self.thread = Thread(name=self.__class__.__name__, target=self.update)
         self.data = []
         self.new_data = []
         self.traffic_scale = 0.015

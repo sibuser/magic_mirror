@@ -14,7 +14,7 @@ from settings import BIRTHDAY_UPDATE_DELAY, CALENDAR_ID
 class Birthday(BaseModule):
     def __init__(self):
         super().__init__()
-        self.thread = Thread(target=self.update)
+        self.thread = Thread(name=self.__class__.__name__, target=self.update)
         self.data = []
         self.new_data = []
         self.event_padding = None

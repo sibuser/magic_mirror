@@ -19,7 +19,7 @@ class Weather(BaseModule):
         self.api_url = 'http://api.openweathermap.org/data/2.5'
         self.weather_url = '{api_url}/weather?q={city},{country}&appid={token}'
         self.forecast_url = '{api_url}/forecast?q={city},{country}&appid={token}'
-        self.thread = Thread(target=self.update)
+        self.thread = Thread(name=self.__class__.__name__, target=self.update)
         self.weather_data = {}
         self.forecast_data = {}
         self.data = []

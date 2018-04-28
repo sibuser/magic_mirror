@@ -12,7 +12,7 @@ from settings import COLORS, CALENDAR_UPDATE_DELAY
 class Calendar(BaseModule):
     def __init__(self):
         super().__init__()
-        self.thread = Thread(target=self.update)
+        self.thread = Thread(name=self.__class__.__name__, target=self.update)
         self.holidays = Sweden().holidays()
 
         self.data = []

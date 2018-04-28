@@ -13,7 +13,7 @@ class DisplayOnOff(BaseModule):
 
     def __init__(self):
         super().__init__()
-        self.thread = Thread(target=self.update)
+        self.thread = Thread(name=self.__class__.__name__, target=self.update)
         self.data = []
 
         self.display_on = self.display_status()
