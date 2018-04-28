@@ -7,7 +7,7 @@ import vasttrafik
 
 from modules.base import BaseModule
 from settings import VASTTRAFIK_KEY, VASTTRAFIK_SECRET, BUSS_STOPS, VASTTRAFIK_UPDATE_DELAY, \
-    SKIP_DIRECTIONS
+    SKIP_DIRECTIONS, COLORS
 
 
 class Vasttrafik(BaseModule):
@@ -53,9 +53,9 @@ class Vasttrafik(BaseModule):
             self.show_buss_number(departure)
             self.show_destination(departure)
 
-            self.show_departure_time(departure, 0.62)
+            self.show_departure_time(departure, 0.63)
             if len(departures) > 1:
-                self.show_departure_time(departures[1], 0.66)
+                self.show_departure_time(departures[1], 0.67)
             self.move_down()
 
     def show_stop_name(self, buss_stop):
@@ -77,8 +77,16 @@ class Vasttrafik(BaseModule):
         self.new_data.append((surface, position))
 
     def show_departure_time(self, departure, left):
-        msg = '{depart_in}'.format(**departure)
-        surface = self.font('light', self.traffic_scale).render(msg, True, self.color)
+        depart_in = departure['depart_in']
+        color = COLORS['white']
+        if 7 < depart_in < 12:
+            color = COLORS['green']
+        if 5 < depart_in < 7:
+            color = COLORS['yellow']
+        if depart_in < 5:
+            color = COLORS['red']
+
+        surface = self.font('light', self.traffic_scale).render(str(depart_in), True, color)
         position = surface.get_rect(left=self.width * left, top=self.height * self.traffic_top)
         self.new_data.append((surface, position))
 
