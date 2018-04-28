@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import logging
+from logging.handlers import RotatingFileHandler
 from subprocess import call
 
 import click
@@ -17,7 +18,8 @@ from settings import MOUSE_VISIBLE, COLORS, KEY_DOWN, KEY_ESCAPE, KEY_WINDOW_X, 
 logging.getLogger('googleapicliet.discovery_cache').setLevel(logging.ERROR)
 logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s', datefmt='%H:%M:%S',
                     level=logging.DEBUG,
-                    handlers=[logging.FileHandler("./magic.log"), logging.StreamHandler()]
+                    handlers=[RotatingFileHandler("./magic.log", maxBytes=10000000),  # 10 Mb
+                              logging.StreamHandler()]
                     )
 
 
