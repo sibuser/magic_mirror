@@ -5,7 +5,7 @@ Modular magic mirror display written in python based on Pygame.
 #### Requirements:
     - pygame
     - click (arguments)
-    - vtjp (for vasstrafik module)
+    - vtjp (for vasttrafik module)
     
 #### Usage:
 >python3 main.py [--help] [-f] [--fullscreen] [-r width height] [--resolution width height] 
