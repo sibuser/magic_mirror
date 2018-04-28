@@ -1,6 +1,6 @@
 import calendar
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta
 from threading import Thread
 
 from workalendar.europe import Sweden
@@ -13,8 +13,7 @@ class Calendar(BaseModule):
     def __init__(self):
         super().__init__()
         self.thread = Thread(name=self.__class__.__name__, target=self.update)
-        self.holidays = Sweden().holidays()
-
+        self.calendar = Sweden()
         self.data = []
         self.new_data = []
 
@@ -43,26 +42,20 @@ class Calendar(BaseModule):
             week_header_pos_left += 0.03
 
     def show_calendar(self):
-
         calendar_scale = 0.01
         calendar_week_pos_top = 0.81
         calendar_day_pos_left = 0.75
 
         today = datetime.today()
-        current_month_holidays = []
-        for holiday in self.holidays:
-            if holiday[0].month == today.month:
-                current_month_holidays.append(holiday[0].day)
-
-        if today.month == 1:
-            previous_month = calendar.monthcalendar(today.year - 1, 12)
-        else:
-            previous_month = calendar.monthcalendar(today.year, today.month - 1)
+        m = datetime.today().replace(day=1) - timedelta(days=1)
+        previous_month = calendar.monthcalendar(m.year, m.month)
 
         for index, day in enumerate(previous_month[4]):
             if day:
-                surface = self.font('regular', calendar_scale).render(str(day), True,
-                                                                      COLORS['gray'])
+                color = COLORS['gray']
+                if self.calendar.is_holiday(m.replace(day=day)):
+                    color = COLORS['red']
+                surface = self.font('regular', calendar_scale).render(str(day), True, color)
                 position = surface.get_rect(left=self.width * calendar_day_pos_left,
                                             top=self.height * calendar_week_pos_top)
                 self.new_data.append((surface, position))
@@ -75,7 +68,7 @@ class Calendar(BaseModule):
                     color = COLORS['white']
                     if day == today.day:
                         color = COLORS['yellow']
-                    elif index == 6 or day in current_month_holidays:
+                    elif index == 6 or self.calendar.is_holiday(today.replace(day=day)):
                         color = COLORS['red']
                     surface = self.font('regular', calendar_scale).render(str(day), True, color)
                     position = surface.get_rect(left=self.width * calendar_day_pos_left,
@@ -85,16 +78,16 @@ class Calendar(BaseModule):
             calendar_day_pos_left = 0.75
             calendar_week_pos_top += 0.015
 
-        if today.month == 12:
-            next_month = calendar.monthcalendar(today.year + 1, 1)
-        else:
-            next_month = calendar.monthcalendar(today.year, today.month + 1)
+        m = today.replace(day=calendar.monthrange(today.year, today.month)[1]) + timedelta(days=1)
+        next_month = calendar.monthcalendar(m.year, m.month)
 
         calendar_week_pos_top -= 0.015
         for index, day in enumerate(next_month[0]):
             if day:
-                surface = self.font('regular', calendar_scale).render(str(day), True,
-                                                                      COLORS['gray'])
+                color = COLORS['gray']
+                if self.calendar.is_holiday(m.replace(day=day)):
+                    color = COLORS['red']
+                surface = self.font('regular', calendar_scale).render(str(day), True, color)
                 position = surface.get_rect(left=self.width * calendar_day_pos_left,
                                             top=self.height * calendar_week_pos_top)
                 self.new_data.append((surface, position))
@@ -109,7 +102,7 @@ class Calendar(BaseModule):
         holiday_date_pos_top = 0.9
 
         today = datetime.today()
-        for holiday in self.holidays:
+        for holiday in self.calendar.holidays():
             if holiday[0].month == today.month:
                 surface = self.font('regular', holiday_name_scale).render(holiday[1], True,
                                                                           self.color)
