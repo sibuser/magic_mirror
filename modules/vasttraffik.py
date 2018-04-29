@@ -81,9 +81,9 @@ class Vasttrafik(BaseModule):
         color = COLORS['white']
         if 10 < depart_in < 15:
             color = COLORS['green']
-        if 7 < depart_in < 10:
+        if 6 < depart_in <= 10:
             color = COLORS['yellow']
-        if depart_in < 7:
+        if depart_in <= 7:
             color = COLORS['red']
 
         surface = self.font('light', self.traffic_scale).render(str(depart_in), True, color)
