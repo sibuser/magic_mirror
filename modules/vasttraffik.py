@@ -40,7 +40,7 @@ class Vasttrafik(BaseModule):
             buss_stop_id = jp.location_name(buss_stop)[0]['id']
         except Exception as e:
             logging.error(e)
-            raise e
+            return
         self.show_stop_name(buss_stop)
         self.move_down()
 

@@ -87,15 +87,19 @@ class Birthday(BaseModule):
 
     def fetch_upcoming_event(self):
         # Call the Calendar API
-        now = datetime.utcnow().replace(hour=1, minute=0).isoformat() + 'Z'
-        events_result = self.service.events().list(calendarId=CALENDAR_ID,
-                                                   timeMin=now,
-                                                   maxResults=10,
-                                                   singleEvents=True,
-                                                   orderBy='startTime').execute()
-        events = events_result.get('items', [])
+        try:
+            now = datetime.utcnow().replace(hour=1, minute=0).isoformat() + 'Z'
+            events_result = self.service.events().list(calendarId=CALENDAR_ID,
+                                                       timeMin=now,
+                                                       maxResults=10,
+                                                       singleEvents=True,
+                                                       orderBy='startTime').execute()
+            events = events_result.get('items', [])
 
-        if not events:
-            logging.info('No upcoming events found.')
+            if not events:
+                logging.info('No upcoming events found.')
+                return []
+            return events
+        except Exception as e:
+            logging.error(e)
             return []
-        return events

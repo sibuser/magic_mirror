@@ -56,7 +56,7 @@ class Weather(BaseModule):
                                           country=WEATHER_COUNTRY,
                                           token=WEATHER_API_TOKEN)).read().decode('utf-8')
             return json.loads(contents)
-        except HTTPError as err:
+        except Exception as err:
             logging.error(err)
             return {}
 

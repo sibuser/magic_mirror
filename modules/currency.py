@@ -1,4 +1,5 @@
 import logging
+import xml.etree.ElementTree as ET
 from threading import Thread
 from urllib.request import urlopen
 
@@ -26,7 +27,6 @@ class Currency(BaseModule):
     def show_rate(self):
         ecb_url = 'http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml'
         exchange_rates = urlopen(ecb_url).read().decode('utf-8')
-        import xml.etree.ElementTree as ET
         root = ET.fromstring(exchange_rates)
         rub, sek = None, None
 
@@ -41,6 +41,7 @@ class Currency(BaseModule):
         position = surface.get_rect(left=self.width * 0.4, top=self.height * 0.005)
         self.new_data.append((surface, position))
 
-        surface = self.font('regular', 0.01).render(str(round(float(rub)/float(sek), 2)), True, self.color)
+        surface = self.font('regular', 0.01).render(str(round(float(rub) / float(sek), 2)), True,
+                                                    self.color)
         position = surface.get_rect(left=self.width * 0.5, top=self.height * 0.005)
         self.new_data.append((surface, position))
