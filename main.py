@@ -36,7 +36,7 @@ def check_if_exit():
               default=False,
               help='Run in full screen mode', is_flag=True)
 @click.option('--resolution', '-r',
-              default=(600, 800),
+              default=(1080, 1920),
               type=(int, int),
               help='Window size width height')
 def main(fullscreen, resolution):
