@@ -35,13 +35,13 @@ class Birthday(BaseModule):
             self.event_padding = 0.012
             self.position_top = 0.8
             events = self.fetch_upcoming_event()
-
-            self.show_header()
-            self.move_down()
-            for event in self.only_current_month(events):
-                self.show_date(event)
-                self.show_summary(event)
+            if events:
+                self.show_header()
                 self.move_down()
+                for event in self.only_current_month(events):
+                    self.show_date(event)
+                    self.show_summary(event)
+                    self.move_down()
 
             self.data.clear()
             self.data = self.new_data[:]
