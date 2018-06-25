@@ -102,7 +102,7 @@ def group_board_by_direction(departures):
     grouped_directions = defaultdict(list)
     for departure in departures:
         depart_time_in = calc_depart_time_in_min(departure)
-        if 3 < depart_time_in < 50:
+        if 1 < depart_time_in < 50:
             departure['depart_in'] = depart_time_in
             grouped_directions[departure['direction']].append(departure)
     return grouped_directions
