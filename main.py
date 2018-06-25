@@ -10,7 +10,6 @@ import pygame
 from modules.birthday import Birthday
 from modules.calendar import Calendar
 from modules.clock import Clock
-from modules.currency import Currency
 from modules.vasttraffik import Vasttrafik
 from modules.weather import Weather
 from settings import MOUSE_VISIBLE, COLORS, KEY_DOWN, KEY_ESCAPE, KEY_WINDOW_X, TEN_MS
@@ -56,7 +55,6 @@ def main(fullscreen, resolution):
         Weather(),
         Clock(),
         Birthday(),
-        Currency(),
         Calendar(),
         Vasttrafik(),
     ]
