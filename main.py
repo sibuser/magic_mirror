@@ -53,11 +53,11 @@ def main(fullscreen, resolution):
     screen.fill(COLORS['black'])
 
     modules = [
-        # Weather(),
-        # Clock(),
-        # Birthday(),
-        # Calendar(),
-        # Vasttrafik(),
+        Weather(),
+        Clock(),
+        Birthday(),
+        Calendar(),
+        Vasttrafik(),
         SystemInfo()
     ]
     try:
