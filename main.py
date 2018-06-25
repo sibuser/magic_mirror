@@ -10,6 +10,7 @@ import pygame
 from modules.birthday import Birthday
 from modules.calendar import Calendar
 from modules.clock import Clock
+from modules.system_info import SystemInfo
 from modules.vasttraffik import Vasttrafik
 from modules.weather import Weather
 from settings import MOUSE_VISIBLE, COLORS, KEY_DOWN, KEY_ESCAPE, KEY_WINDOW_X, TEN_MS
@@ -35,7 +36,7 @@ def check_if_exit():
               default=False,
               help='Run in full screen mode', is_flag=True)
 @click.option('--resolution', '-r',
-              default=(1080, 1920),
+              default=(600, 800),
               type=(int, int),
               help='Window size width height')
 def main(fullscreen, resolution):
@@ -52,11 +53,12 @@ def main(fullscreen, resolution):
     screen.fill(COLORS['black'])
 
     modules = [
-        Weather(),
-        Clock(),
-        Birthday(),
-        Calendar(),
-        Vasttrafik(),
+        # Weather(),
+        # Clock(),
+        # Birthday(),
+        # Calendar(),
+        # Vasttrafik(),
+        SystemInfo()
     ]
     try:
         # Check if vcgencmd is installed, to see if it is running on a
