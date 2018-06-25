@@ -50,7 +50,7 @@ class Calendar(BaseModule):
         m = datetime.today().replace(day=1) - timedelta(days=1)
         previous_month = calendar.monthcalendar(m.year, m.month)
 
-        for index, day in enumerate(previous_month[4]):
+        for index, day in enumerate(previous_month[-1]):
             if day:
                 color = COLORS['gray']
                 if self.calendar.is_holiday(m.replace(day=day)):
