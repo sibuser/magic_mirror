@@ -56,7 +56,7 @@ class Birthday(BaseModule):
 
         for event in events:
             start = parser.parse(event['start'].get('dateTime', event['start'].get('date')))
-            if start.month == today.month:
+            if start.month == today.month and start.year == today.year:
                 yield event
 
     def move_down(self):
