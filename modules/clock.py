@@ -11,9 +11,9 @@ class Clock(BaseModule):
         super().__init__()
         self.thread = Thread(name=self.__class__.__name__, target=self.update)
         self.time_pos = 0
-        self.time_scale = 0.035
-        self.date_pos = 0.038
-        self.date_scale = 0.01
+        self.time_scale = 0.07
+        self.date_pos = 0.073
+        self.date_scale = 0.03
 
         self.data = []
         self.new_data = []
@@ -37,7 +37,7 @@ class Clock(BaseModule):
 
     def show_date(self):
         today = datetime.today()
-        text = '{weekday}, {month} {day}'.format(weekday='Saturday',
+        text = '{weekday}, {month} {day}'.format(weekday=today.strftime('%A'),
                                                  month=today.strftime('%B'),
                                                  day=today.day)
         surface = self.font('regular', self.date_scale).render(text, True, self.color)
