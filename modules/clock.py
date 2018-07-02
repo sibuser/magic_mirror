@@ -11,9 +11,9 @@ class Clock(BaseModule):
         super().__init__()
         self.thread = Thread(name=self.__class__.__name__, target=self.update)
         self.time_pos = 0
-        self.time_scale = 0.07
-        self.date_pos = 0.073
-        self.date_scale = 0.03
+        self.time_scale = 0.035
+        self.date_pos = 0.038
+        self.date_scale = 0.01
 
         self.data = []
         self.new_data = []
