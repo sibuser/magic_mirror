@@ -9,6 +9,7 @@ from modules.birthday import Birthday
 from modules.calendar import Calendar
 from modules.clock import Clock
 from modules.logs import setup_logger
+from modules.screen_shots import ScreenShot
 from modules.system_info import SystemInfo
 from modules.vasttraffik import Vasttrafik
 from modules.weather import Weather
@@ -52,7 +53,8 @@ def main(fullscreen, resolution):
         Birthday(),
         Calendar(),
         Vasttrafik(),
-        SystemInfo()
+        SystemInfo(),
+        ScreenShot(),
     ]
     try:
         # Check if vcgencmd is installed, to see if it is running on a
@@ -79,10 +81,10 @@ def main(fullscreen, resolution):
                 return
             pygame.time.wait(TEN_MS)
     finally:
-
         logging.info('Stopping all threads')
         for module in modules:
             module.stop()
+        logging.info('Stopped all threads')
 
 
 if __name__ == '__main__':
