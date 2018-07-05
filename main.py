@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from subprocess import call
+from time import sleep
 
 import click
 import pygame
@@ -9,11 +10,10 @@ from modules.birthday import Birthday
 from modules.calendar import Calendar
 from modules.clock import Clock
 from modules.logs import setup_logger
-from modules.screen_shots import ScreenShot
 from modules.system_info import SystemInfo
 from modules.vasttraffik import Vasttrafik
 from modules.weather import Weather
-from settings import MOUSE_VISIBLE, COLORS, KEY_DOWN, KEY_ESCAPE, KEY_WINDOW_X, TEN_MS
+from settings import MOUSE_VISIBLE, COLORS, KEY_DOWN, KEY_ESCAPE, KEY_WINDOW_X
 
 logging = setup_logger(__name__)
 
@@ -54,7 +54,6 @@ def main(fullscreen, resolution):
         Calendar(),
         Vasttrafik(),
         SystemInfo(),
-        ScreenShot(),
     ]
     try:
         # Check if vcgencmd is installed, to see if it is running on a
@@ -76,10 +75,10 @@ def main(fullscreen, resolution):
                 for surface, position in data:
                     screen.blit(surface, position)
             pygame.display.flip()
-
+            pygame.image.save(screen, 'screen_shot.jpg')
+            sleep(1)
             if check_if_exit():
                 return
-            pygame.time.wait(TEN_MS)
     finally:
         logging.info('Stopping all threads')
         for module in modules:
