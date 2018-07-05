@@ -152,7 +152,7 @@ class Weather(BaseModule):
         tomorrow = today + timedelta(days=1)
         after_tomorrow = today + timedelta(days=2)
         feature = today + timedelta(days=3)
-        for forecast in self.forecast_data['list']:
+        for forecast in self.forecast_data.get('list', []):
             dt = parser.parse(forecast['dt_txt'])
             if dt == tomorrow or dt == after_tomorrow or dt == feature:
                 tmp.append(forecast)
