@@ -1,4 +1,3 @@
-import logging
 from datetime import datetime
 from threading import Thread
 
@@ -8,7 +7,10 @@ from httplib2 import Http
 from oauth2client import file, client, tools
 
 from modules.base import BaseModule
+from modules.logs import setup_logger
 from settings import BIRTHDAY_UPDATE_DELAY, CALENDAR_ID
+
+logging = setup_logger(__name__)
 
 
 class Birthday(BaseModule):
@@ -46,7 +48,6 @@ class Birthday(BaseModule):
             self.data.clear()
             self.data = self.new_data[:]
             self.new_data.clear()
-
             logging.debug("Completed updating %s..." % self.__class__.__name__)
             self.sleep(BIRTHDAY_UPDATE_DELAY)
         logging.info('Stopped %s...' % self.__class__.__name__)

@@ -1,16 +1,17 @@
 import json
-import logging
 import os
-from datetime import datetime, timedelta
-from threading import Thread
-from urllib.error import HTTPError
 from urllib.request import urlopen
-from dateutil import parser
 
 import pygame
+from datetime import datetime, timedelta
+from dateutil import parser
+from threading import Thread
 
 from modules.base import BaseModule
+from modules.logs import setup_logger
 from settings import COLORS, WEATHER_API_TOKEN, WEATHER_COUNTRY, WEATHER_CITY, FIVE_MINUTES
+
+logging = setup_logger(__name__)
 
 
 class Weather(BaseModule):
@@ -45,6 +46,7 @@ class Weather(BaseModule):
             self.data.clear()
             self.data = self.new_data[:]
             self.new_data.clear()
+
             logging.debug("Completed updating %s..." % self.__class__.__name__)
             self.sleep(FIVE_MINUTES)
         logging.info('Stopped %s...' % self.__class__.__name__)
@@ -161,7 +163,8 @@ class Weather(BaseModule):
             if not os.path.isfile(os.path.join('resources', 'icons', '%s.png' % icon_name)):
                 icon_name = 'default'
             surface = pygame.image.load(os.path.join('resources', 'icons', '%s.png' % icon_name))
-            surface = pygame.transform.scale(surface, (int(self.width * 0.05), int(self.width * 0.05)))
+            surface = pygame.transform.scale(surface,
+                                             (int(self.width * 0.05), int(self.width * 0.05)))
             position = surface.get_rect(left=self.width * 0.01, top=self.height * init_pos)
             self.new_data.append((surface, position))
 
@@ -176,4 +179,3 @@ class Weather(BaseModule):
             self.new_data.append((surface, position))
 
             init_pos += 0.04
-

@@ -1,11 +1,13 @@
-import logging
 import netifaces as ni
 import socket
 
 from threading import Thread
 
 from modules.base import BaseModule
+from modules.logs import setup_logger
 from settings import SYS_INFO_UPDATE_DELAY, IP_INTERFACE
+
+logging = setup_logger(__name__)
 
 
 class SystemInfo(BaseModule):
@@ -24,6 +26,7 @@ class SystemInfo(BaseModule):
             self.data = []
             self.data = self.new_data[:]
             self.new_data.clear()
+            logging.debug("Completed updating %s..." % self.__class__.__name__)
             self.sleep(SYS_INFO_UPDATE_DELAY)
         logging.info('Stopped %s...' % self.__class__.__name__)
 

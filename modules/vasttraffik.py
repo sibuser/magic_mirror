@@ -1,13 +1,15 @@
-import logging
 from collections import defaultdict
+
+import vasttrafik
 from datetime import datetime
 from threading import Thread
 
-import vasttrafik
-
 from modules.base import BaseModule
+from modules.logs import setup_logger
 from settings import VASTTRAFIK_KEY, VASTTRAFIK_SECRET, BUSS_STOPS, VASTTRAFIK_UPDATE_DELAY, \
     SKIP_DIRECTIONS, COLORS
+
+logging = setup_logger(__name__)
 
 
 class Vasttrafik(BaseModule):

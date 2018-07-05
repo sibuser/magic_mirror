@@ -1,9 +1,11 @@
-import logging
 from datetime import datetime
 from threading import Thread
 
 from modules.base import BaseModule
+from modules.logs import setup_logger
 from settings import CLOCK_UPDATE_DELAY
+
+logging = setup_logger(__name__)
 
 
 class Clock(BaseModule):
@@ -26,6 +28,7 @@ class Clock(BaseModule):
             self.data = []
             self.data = self.new_data[:]
             self.new_data.clear()
+            logging.debug("Completed updating %s..." % self.__class__.__name__)
             self.sleep(CLOCK_UPDATE_DELAY)
         logging.info('Stopped %s...' % self.__class__.__name__)
 

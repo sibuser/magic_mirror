@@ -1,12 +1,14 @@
 import calendar
-import logging
+
 from datetime import datetime, timedelta
 from threading import Thread
-
 from workalendar.europe import Sweden
 
 from modules.base import BaseModule
+from modules.logs import setup_logger
 from settings import COLORS, CALENDAR_UPDATE_DELAY
+
+logging = setup_logger(__name__)
 
 
 class Calendar(BaseModule):
@@ -26,6 +28,7 @@ class Calendar(BaseModule):
             self.data = []
             self.data = self.new_data[:]
             self.new_data.clear()
+            logging.debug("Completed updating %s..." % self.__class__.__name__)
             self.sleep(CALENDAR_UPDATE_DELAY)
         logging.info('Stopped %s...' % self.__class__.__name__)
 

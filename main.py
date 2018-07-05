@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-import logging
-from logging.handlers import RotatingFileHandler
 from subprocess import call
 
 import click
@@ -10,17 +8,13 @@ import pygame
 from modules.birthday import Birthday
 from modules.calendar import Calendar
 from modules.clock import Clock
+from modules.logs import setup_logger
 from modules.system_info import SystemInfo
 from modules.vasttraffik import Vasttrafik
 from modules.weather import Weather
 from settings import MOUSE_VISIBLE, COLORS, KEY_DOWN, KEY_ESCAPE, KEY_WINDOW_X, TEN_MS
 
-logging.getLogger('googleapicliet.discovery_cache').setLevel(logging.ERROR)
-logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s', datefmt='%H:%M:%S',
-                    level=logging.DEBUG,
-                    handlers=[RotatingFileHandler("./magic.log", maxBytes=10000000),  # 10 Mb
-                              logging.StreamHandler()]
-                    )
+logging = setup_logger(__name__)
 
 
 def check_if_exit():

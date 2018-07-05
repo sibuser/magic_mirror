@@ -1,11 +1,14 @@
-import logging
 import subprocess
+
 from datetime import datetime
 from threading import Thread
 
 from modules.base import BaseModule
+from modules.logs import setup_logger
 from settings import TIME_TURN_ON_SCREEN, TIME_TURN_OFF_SCREEN, DISPLAY_ON_OFF_UPDATE_DELAY, \
     ENABLE_OF_OFF_SCREEN
+
+logging = setup_logger(__name__)
 
 
 class DisplayOnOff(BaseModule):

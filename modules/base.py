@@ -1,9 +1,11 @@
-import logging
 from time import sleep
 
 import pygame
 
+from modules.logs import setup_logger
 from settings import FONTS, COLORS
+
+logging = setup_logger(__name__)
 
 
 class BaseModule(object):
