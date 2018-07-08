@@ -38,6 +38,7 @@ class Weather(BaseModule):
             else:
                 self.show_temp()
                 self.show_humidity()
+                self.show_pressure()
                 self.show_condition()
                 self.show_description()
                 self.show_city()
@@ -119,6 +120,24 @@ class Weather(BaseModule):
         position = surface.get_rect(left=hum_icon_pos_left, top=hum_icon_pos_top)
         self.new_data.append((surface, position))
 
+    def show_pressure(self):
+        pos_top = self.height * 0.06
+        pos_left = self.width * 0.17
+
+        pressure = '%d' % (self.weather_data['main']['pressure'])
+        surface = self.font('light', 0.015).render(pressure, True, self.color)
+        position = surface.get_rect(left=pos_left, top=pos_top)
+        self.new_data.append((surface, position))
+
+        icon_pos_top = self.height * 0.0625
+        icon_pos_left = self.width * 0.24
+
+        surface = pygame.image.load(os.path.join('resources', 'icons', '049-barometer.png'))
+        surface = pygame.transform.scale(surface,
+                                         (int(self.width * 0.025), int(self.width * 0.025)))
+        position = surface.get_rect(left=icon_pos_left, top=icon_pos_top)
+        self.new_data.append((surface, position))
+
     def show_condition(self):
         condition = str(self.weather_data['weather'][0]['id'])
         icon_name = self.icon_mapping.get(condition)['icon']
@@ -167,7 +186,7 @@ class Weather(BaseModule):
 
     def show_forecast(self):
         tmp = []
-        today = datetime.today().replace(hour=9, minute=0, second=0, microsecond=0)
+        today = datetime.today().replace(hour=12, minute=0, second=0, microsecond=0)
         tomorrow = today + timedelta(days=1)
         after_tomorrow = today + timedelta(days=2)
         feature = today + timedelta(days=3)
