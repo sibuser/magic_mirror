@@ -12,10 +12,6 @@ class Clock(BaseModule):
     def __init__(self):
         super().__init__()
         self.thread = Thread(name=self.__class__.__name__, target=self.update)
-        self.time_pos = 0
-        self.time_scale = 0.035
-        self.date_pos = 0.038
-        self.date_scale = 0.01
 
         self.data = []
         self.new_data = []
@@ -32,16 +28,24 @@ class Clock(BaseModule):
         logging.info('Stopped %s...' % self.__class__.__name__)
 
     def show_time(self):
+        time_pos_top = 0
+        time_pos_left = 0.74
+        time_scale = 0.048
+
         current_time = datetime.today().strftime("%H:%M")
-        surface = self.font('regular', self.time_scale).render(current_time, True, self.color)
-        position = surface.get_rect(left=self.width * 0.77, top=self.height * self.time_pos)
+        surface = self.font('regular', time_scale).render(current_time, True, self.color)
+        position = surface.get_rect(left=self.width * time_pos_left, top=self.height * time_pos_top)
         self.new_data.append((surface, position))
 
     def show_date(self):
+        date_pos_top = 0.052
+        date_pos_left = 0.72
+        date_scale = 0.02
+
         today = datetime.today()
         text = '{weekday}, {month} {day}'.format(weekday=today.strftime('%A'),
                                                  month=today.strftime('%B'),
                                                  day=today.day)
-        surface = self.font('regular', self.date_scale).render(text, True, self.color)
-        position = surface.get_rect(left=self.width * 0.772, top=self.height * self.date_pos)
+        surface = self.font('regular', date_scale).render(text, True, self.color)
+        position = surface.get_rect(left=self.width * date_pos_left, top=self.height * date_pos_top)
         self.new_data.append((surface, position))

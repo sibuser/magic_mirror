@@ -37,6 +37,7 @@ class Weather(BaseModule):
                 self.show_empty_forecast()
             else:
                 self.show_temp()
+                self.show_humidity()
                 self.show_condition()
                 self.show_description()
                 self.show_city()
@@ -98,6 +99,24 @@ class Weather(BaseModule):
         temp = '%d\u00b0' % (self.weather_data['main']['temp'] - 273.15)
         surface = self.font('light', 0.035).render(temp, True, self.color)
         position = surface.get_rect(left=self.width * 0.01, top=0)
+        self.new_data.append((surface, position))
+
+    def show_humidity(self):
+        hum_pos_top = self.height * 0.04
+        hum_pos_left = self.width * 0.185
+
+        humidity = '%d' % (self.weather_data['main']['humidity'])
+        surface = self.font('light', 0.015).render(humidity, True, self.color)
+        position = surface.get_rect(left=hum_pos_left, top=hum_pos_top)
+        self.new_data.append((surface, position))
+
+        hum_icon_pos_top = self.height * 0.0425
+        hum_icon_pos_left = self.width * 0.24
+
+        surface = pygame.image.load(os.path.join('resources', 'icons', '005-humidity.png'))
+        surface = pygame.transform.scale(surface,
+                                         (int(self.width * 0.025), int(self.width * 0.025)))
+        position = surface.get_rect(left=hum_icon_pos_left, top=hum_icon_pos_top)
         self.new_data.append((surface, position))
 
     def show_condition(self):
