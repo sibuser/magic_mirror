@@ -289,24 +289,3 @@ class Weather(BaseModule):
             self.new_data.append((surface, position))
 
             init_left_pos += 0.06
-        #     condition = str(forecast['weather'][0]['id'])
-        #     icon_name = self.icon_mapping.get(condition)['icon']
-        #     if not os.path.isfile(os.path.join('resources', 'icons', '%s.png' % icon_name)):
-        #         icon_name = 'default'
-        #     surface = pygame.image.load(os.path.join('resources', 'icons', '%s.png' % icon_name))
-        #     surface = pygame.transform.scale(surface,
-        #                                      (int(self.width * 0.05), int(self.width * 0.05)))
-        #     position = surface.get_rect(left=self.width * 0.01, top=self.height * init_pos)
-        #     self.new_data.append((surface, position))
-        #
-        #     temp = '%d\u00b0' % (forecast['main']['temp'] - 273.15)
-        #     surface = self.font('light', 0.02).render(temp, True, self.color)
-        #     position = surface.get_rect(left=self.width * 0.07, top=self.height * init_pos)
-        #     self.new_data.append((surface, position))
-        #
-        #     day_name = parser.parse(forecast['dt_txt']).strftime('%a')
-        #     surface = self.font('light', 0.02).render(day_name, True, self.color)
-        #     position = surface.get_rect(left=self.width * 0.12, top=self.height * init_pos)
-        #     self.new_data.append((surface, position))
-        #
-        #     init_pos += 0.04
