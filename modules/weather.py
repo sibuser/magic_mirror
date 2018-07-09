@@ -142,7 +142,7 @@ class Weather(BaseModule):
 
                 hours = forecast_time.strftime('%H:%M')
                 surface = self.font('light', 0.0095).render(hours, True, self.color)
-                position = surface.get_rect(left=self.width * init_left_pos, top=self.height * 0.14)
+                position = surface.get_rect(left=self.width * init_left_pos, top=self.height * 0.145)
                 self.new_data.append((surface, position))
 
                 init_left_pos += 0.06
@@ -285,7 +285,7 @@ class Weather(BaseModule):
 
             hours = parser.parse(weather['validTime']).strftime('%a')
             surface = self.font('light', 0.0095).render(hours, True, self.color)
-            position = surface.get_rect(left=self.width * init_left_pos, top=self.height * 0.23)
+            position = surface.get_rect(left=self.width * init_left_pos, top=self.height * 0.235)
             self.new_data.append((surface, position))
 
             init_left_pos += 0.06
