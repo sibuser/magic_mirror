@@ -198,7 +198,7 @@ class Weather(BaseModule):
         icon_pos_top = self.height * 0.0625
         icon_pos_left = self.width * 0.24
 
-        surface = pygame.image.load(os.path.join('resources', 'icons', '0barometer.png'))
+        surface = pygame.image.load(os.path.join('resources', 'icons', 'barometer.png'))
         surface = pygame.transform.scale(surface,
                                          (int(self.width * 0.025), int(self.width * 0.025)))
         position = surface.get_rect(left=icon_pos_left, top=icon_pos_top)
