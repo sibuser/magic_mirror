@@ -180,7 +180,7 @@ class Weather(BaseModule):
         hum_icon_pos_top = self.height * 0.0425
         hum_icon_pos_left = self.width * 0.24
 
-        surface = pygame.image.load(os.path.join('resources', 'icons', '005-humidity.png'))
+        surface = pygame.image.load(os.path.join('resources', 'icons', 'humidity.png'))
         surface = pygame.transform.scale(surface,
                                          (int(self.width * 0.025), int(self.width * 0.025)))
         position = surface.get_rect(left=hum_icon_pos_left, top=hum_icon_pos_top)
@@ -198,7 +198,7 @@ class Weather(BaseModule):
         icon_pos_top = self.height * 0.0625
         icon_pos_left = self.width * 0.24
 
-        surface = pygame.image.load(os.path.join('resources', 'icons', '049-barometer.png'))
+        surface = pygame.image.load(os.path.join('resources', 'icons', '0barometer.png'))
         surface = pygame.transform.scale(surface,
                                          (int(self.width * 0.025), int(self.width * 0.025)))
         position = surface.get_rect(left=icon_pos_left, top=icon_pos_top)
