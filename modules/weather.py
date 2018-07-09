@@ -9,7 +9,8 @@ from threading import Thread
 
 from modules.base import BaseModule
 from modules.logs import setup_logger
-from settings import COLORS, WEATHER_API_TOKEN, WEATHER_COUNTRY, WEATHER_CITY, FIVE_MINUTES
+from settings import COLORS, FIVE_MINUTES, \
+    WEATHER_ICON_MAP, WEATHER_CITY, WEATHER_COUNTRY, WEATHER_API_TOKEN
 
 logging = setup_logger(__name__)
 
@@ -17,26 +18,31 @@ logging = setup_logger(__name__)
 class Weather(BaseModule):
     def __init__(self):
         super(Weather, self).__init__()
+        self.smhi_api_url = 'https://opendata-download-metfcst.smhi.se/api/category/pmp3g/' \
+                            'version/2/geotype/point/lon/12.002109/lat/57.679769/data.json'
+
         self.api_url = 'http://api.openweathermap.org/data/2.5'
         self.weather_url = '{api_url}/weather?q={city},{country}&appid={token}'
         self.forecast_url = '{api_url}/forecast?q={city},{country}&appid={token}'
         self.thread = Thread(name=self.__class__.__name__, target=self.update)
         self.weather_data = {}
         self.forecast_data = {}
+        self.smhi_forecast = {}
         self.data = []
         self.new_data = []
-        with open(os.path.join('resources', 'icon_map.json')) as f:
-            self.icon_mapping = json.loads(f.read())
+        self.icon_mapping = WEATHER_ICON_MAP
 
     def update(self):
         while not self.shutdown:
             self.weather_data = self.fetch_weather(self.weather_url)
             self.forecast_data = self.fetch_weather(self.forecast_url)
+            self.smhi_forecast = self.fetch_smhi_forecast()
 
             if not self.weather_data:
                 self.show_empty_forecast()
             else:
                 self.show_temp()
+                self.show_temp_day()
                 self.show_humidity()
                 self.show_pressure()
                 self.show_condition()
@@ -52,6 +58,13 @@ class Weather(BaseModule):
             logging.debug("Completed updating %s..." % self.__class__.__name__)
             self.sleep(FIVE_MINUTES)
         logging.info('Stopped %s...' % self.__class__.__name__)
+
+    def fetch_smhi_forecast(self):
+        try:
+            return json.loads(urlopen(self.smhi_api_url).read().decode('utf-8'))
+        except Exception as err:
+            logging.error(err)
+            return {}
 
     def fetch_weather(self, url):
         try:
@@ -97,10 +110,63 @@ class Weather(BaseModule):
         return surface, position
 
     def show_temp(self):
-        temp = '%d\u00b0' % (self.weather_data['main']['temp'] - 273.15)
+        temp = '%d\u00b0' % self.find_temp(self.smhi_forecast['timeSeries'][0])
         surface = self.font('light', 0.035).render(temp, True, self.color)
         position = surface.get_rect(left=self.width * 0.01, top=0)
         self.new_data.append((surface, position))
+
+    def show_temp_day(self):
+        step = 3
+        counter = 0
+        init_left_pos = 0.01
+
+        for weather in self.smhi_forecast['timeSeries']:
+            forecast_time = parser.parse(weather['validTime'])
+            if forecast_time.hour == (datetime.now() + timedelta(hours=step)).time().hour:
+                condition = self.find_condition(weather)
+                icon_name = self.icon_mapping.get(condition)['icon']
+                if not os.path.isfile(os.path.join('resources', 'icons', '%s.png' % icon_name)):
+                    icon_name = 'default'
+                surface = pygame.image.load(
+                    os.path.join('resources', 'icons', '%s.png' % icon_name))
+                surface = pygame.transform.scale(surface,
+                                                 (int(self.width * 0.05),
+                                                  int(self.width * 0.05)))
+                position = surface.get_rect(left=self.width * init_left_pos, top=self.height * 0.09)
+                self.new_data.append((surface, position))
+
+                temp = '%d\u00b0' % self.find_temp(weather)
+                surface = self.font('light', 0.02).render(temp, True, self.color)
+                position = surface.get_rect(left=self.width * init_left_pos, top=self.height * 0.12)
+                self.new_data.append((surface, position))
+
+                hours = forecast_time.strftime('%H:%M')
+                surface = self.font('light', 0.0095).render(hours, True, self.color)
+                position = surface.get_rect(left=self.width * init_left_pos, top=self.height * 0.14)
+                self.new_data.append((surface, position))
+
+                init_left_pos += 0.06
+                step += 3
+                counter += 1
+            if counter == 5:
+                break
+
+    def find_condition(self, forecast):
+        condition = 99
+
+        for param in forecast['parameters']:
+            if param['name'] == 'Wsymb2':
+                condition = param['values'][0]
+                break
+        return condition
+
+    def find_temp(self, forecast):
+        temp = 99
+        for param in forecast['parameters']:
+            if param['name'] == 't':
+                temp = param['values'][0]
+                break
+        return temp
 
     def show_humidity(self):
         hum_pos_top = self.height * 0.04
@@ -139,8 +205,8 @@ class Weather(BaseModule):
         self.new_data.append((surface, position))
 
     def show_condition(self):
-        condition = str(self.weather_data['weather'][0]['id'])
-        icon_name = self.icon_mapping.get(condition)['icon']
+        icon_name = self.icon_mapping.get(self.find_condition(self.smhi_forecast['timeSeries'][0]))[
+            'icon']
         if not os.path.isfile(os.path.join('resources', 'icons', '%s.png' % icon_name)):
             icon_name = 'default'
         surface = pygame.image.load(os.path.join('resources', 'icons', '%s.png' % icon_name))
@@ -149,7 +215,12 @@ class Weather(BaseModule):
         self.new_data.append((surface, position))
 
     def show_description(self):
-        desc = self.weather_data['weather'][0]['description'].title()
+        condition = 99
+        for param in self.smhi_forecast['timeSeries'][0]['parameters']:
+            if param['name'] == 'Wsymb2':
+                condition = param['values'][0]
+                break
+        desc = self.icon_mapping.get(condition)['label']
         surface = self.font('light', 0.01).render(desc, True, self.color)
         position = surface.get_rect(left=self.width * 0.01, top=self.height * 0.04)
         self.new_data.append((surface, position))
@@ -187,33 +258,55 @@ class Weather(BaseModule):
     def show_forecast(self):
         tmp = []
         today = datetime.today().replace(hour=12, minute=0, second=0, microsecond=0)
-        tomorrow = today + timedelta(days=1)
-        after_tomorrow = today + timedelta(days=2)
-        feature = today + timedelta(days=3)
-        for forecast in self.forecast_data.get('list', []):
-            dt = parser.parse(forecast['dt_txt'])
-            if dt == tomorrow or dt == after_tomorrow or dt == feature:
+        init_left_pos = 0.01
+
+        for forecast in self.smhi_forecast['timeSeries']:
+            dt = parser.parse(forecast['validTime'])
+            if dt.time() == today.time() and dt.date() != today.date():
                 tmp.append(forecast)
-        init_pos = 0.08
-        for forecast in tmp:
-            condition = str(forecast['weather'][0]['id'])
+
+        for weather in tmp[:5]:
+            condition = self.find_condition(weather)
             icon_name = self.icon_mapping.get(condition)['icon']
             if not os.path.isfile(os.path.join('resources', 'icons', '%s.png' % icon_name)):
                 icon_name = 'default'
-            surface = pygame.image.load(os.path.join('resources', 'icons', '%s.png' % icon_name))
+            surface = pygame.image.load(
+                os.path.join('resources', 'icons', '%s.png' % icon_name))
             surface = pygame.transform.scale(surface,
-                                             (int(self.width * 0.05), int(self.width * 0.05)))
-            position = surface.get_rect(left=self.width * 0.01, top=self.height * init_pos)
+                                             (int(self.width * 0.05),
+                                              int(self.width * 0.05)))
+            position = surface.get_rect(left=self.width * init_left_pos, top=self.height * 0.18)
             self.new_data.append((surface, position))
 
-            temp = '%d\u00b0' % (forecast['main']['temp'] - 273.15)
+            temp = '%d\u00b0' % self.find_temp(weather)
             surface = self.font('light', 0.02).render(temp, True, self.color)
-            position = surface.get_rect(left=self.width * 0.07, top=self.height * init_pos)
+            position = surface.get_rect(left=self.width * init_left_pos, top=self.height * 0.21)
             self.new_data.append((surface, position))
 
-            temp = parser.parse(forecast['dt_txt']).strftime('%a')
-            surface = self.font('light', 0.02).render(temp, True, self.color)
-            position = surface.get_rect(left=self.width * 0.12, top=self.height * init_pos)
+            hours = parser.parse(weather['validTime']).strftime('%a')
+            surface = self.font('light', 0.0095).render(hours, True, self.color)
+            position = surface.get_rect(left=self.width * init_left_pos, top=self.height * 0.23)
             self.new_data.append((surface, position))
 
-            init_pos += 0.04
+            init_left_pos += 0.06
+        #     condition = str(forecast['weather'][0]['id'])
+        #     icon_name = self.icon_mapping.get(condition)['icon']
+        #     if not os.path.isfile(os.path.join('resources', 'icons', '%s.png' % icon_name)):
+        #         icon_name = 'default'
+        #     surface = pygame.image.load(os.path.join('resources', 'icons', '%s.png' % icon_name))
+        #     surface = pygame.transform.scale(surface,
+        #                                      (int(self.width * 0.05), int(self.width * 0.05)))
+        #     position = surface.get_rect(left=self.width * 0.01, top=self.height * init_pos)
+        #     self.new_data.append((surface, position))
+        #
+        #     temp = '%d\u00b0' % (forecast['main']['temp'] - 273.15)
+        #     surface = self.font('light', 0.02).render(temp, True, self.color)
+        #     position = surface.get_rect(left=self.width * 0.07, top=self.height * init_pos)
+        #     self.new_data.append((surface, position))
+        #
+        #     day_name = parser.parse(forecast['dt_txt']).strftime('%a')
+        #     surface = self.font('light', 0.02).render(day_name, True, self.color)
+        #     position = surface.get_rect(left=self.width * 0.12, top=self.height * init_pos)
+        #     self.new_data.append((surface, position))
+        #
+        #     init_pos += 0.04
