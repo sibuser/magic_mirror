@@ -26,7 +26,6 @@ class Weather(BaseModule):
         self.forecast_url = '{api_url}/forecast?q={city},{country}&appid={token}'
         self.thread = Thread(name=self.__class__.__name__, target=self.update)
         self.weather_data = {}
-        self.forecast_data = {}
         self.smhi_forecast = {}
         self.data = []
         self.new_data = []
@@ -35,7 +34,6 @@ class Weather(BaseModule):
     def update(self):
         while not self.shutdown:
             self.weather_data = self.fetch_weather(self.weather_url)
-            self.forecast_data = self.fetch_weather(self.forecast_url)
             self.smhi_forecast = self.fetch_smhi_forecast()
 
             if not self.weather_data:
