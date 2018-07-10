@@ -113,42 +113,6 @@ class Weather(BaseModule):
         position = surface.get_rect(left=self.width * 0.01, top=0)
         self.new_data.append((surface, position))
 
-    def show_temp_day(self):
-        step = 3
-        counter = 0
-        init_left_pos = 0.01
-
-        for weather in self.smhi_forecast['timeSeries']:
-            forecast_time = parser.parse(weather['validTime'])
-            if forecast_time.hour == (datetime.now() + timedelta(hours=step)).time().hour:
-                condition = self.find_condition(weather)
-                icon_name = self.icon_mapping.get(condition)['icon']
-                if not os.path.isfile(os.path.join('resources', 'icons', '%s.png' % icon_name)):
-                    icon_name = 'default'
-                surface = pygame.image.load(
-                    os.path.join('resources', 'icons', '%s.png' % icon_name))
-                surface = pygame.transform.scale(surface,
-                                                 (int(self.width * 0.05),
-                                                  int(self.width * 0.05)))
-                position = surface.get_rect(left=self.width * init_left_pos, top=self.height * 0.09)
-                self.new_data.append((surface, position))
-
-                temp = '%d\u00b0' % self.find_temp(weather)
-                surface = self.font('light', 0.02).render(temp, True, self.color)
-                position = surface.get_rect(left=self.width * init_left_pos, top=self.height * 0.12)
-                self.new_data.append((surface, position))
-
-                hours = forecast_time.strftime('%H:%M')
-                surface = self.font('light', 0.0095).render(hours, True, self.color)
-                position = surface.get_rect(left=self.width * init_left_pos, top=self.height * 0.145)
-                self.new_data.append((surface, position))
-
-                init_left_pos += 0.06
-                step += 3
-                counter += 1
-            if counter == 5:
-                break
-
     def find_condition(self, forecast):
         condition = 99
 
@@ -208,7 +172,7 @@ class Weather(BaseModule):
         if not os.path.isfile(os.path.join('resources', 'icons', '%s.png' % icon_name)):
             icon_name = 'default'
         surface = pygame.image.load(os.path.join('resources', 'icons', '%s.png' % icon_name))
-        surface = pygame.transform.scale(surface, (int(self.width * 0.05), int(self.width * 0.05)))
+        surface = pygame.transform.scale(surface, (int(self.width * 0.08), int(self.width * 0.06)))
         position = surface.get_rect(left=self.width * 0.09, top=self.height * 0.007)
         self.new_data.append((surface, position))
 
@@ -253,6 +217,44 @@ class Weather(BaseModule):
         position = surface.get_rect(left=self.width * 0.24, top=self.height * 0.0025)
         self.new_data.append((surface, position))
 
+    def show_temp_day(self):
+        step = 3
+        counter = 0
+        init_left_pos = 0.01
+
+        for weather in self.smhi_forecast['timeSeries']:
+            forecast_time = parser.parse(weather['validTime'])
+            if forecast_time.hour == (datetime.now() + timedelta(hours=step)).time().hour:
+                condition = self.find_condition(weather)
+                icon_name = self.icon_mapping.get(condition)['icon']
+                if not os.path.isfile(os.path.join('resources', 'icons', '%s.png' % icon_name)):
+                    icon_name = 'default'
+                surface = pygame.image.load(
+                    os.path.join('resources', 'icons', '%s.png' % icon_name))
+                surface = pygame.transform.scale(surface,
+                                                 (int(self.width * 0.07),
+                                                  int(self.width * 0.05)))
+                position = surface.get_rect(left=self.width * init_left_pos, top=self.height * 0.09)
+                self.new_data.append((surface, position))
+
+                init_left_pos += 0.017
+
+                temp = '%d\u00b0' % self.find_temp(weather)
+                surface = self.font('light', 0.02).render(temp, True, self.color)
+                position = surface.get_rect(left=self.width * init_left_pos, top=self.height * 0.115)
+                self.new_data.append((surface, position))
+
+                hours = forecast_time.strftime('%H:%M')
+                surface = self.font('light', 0.0095).render(hours, True, self.color)
+                position = surface.get_rect(left=self.width * init_left_pos, top=self.height * 0.14)
+                self.new_data.append((surface, position))
+
+                init_left_pos += 0.06
+                step += 3
+                counter += 1
+            if counter == 5:
+                break
+
     def show_forecast(self):
         tmp = []
         today = datetime.today().replace(hour=12, minute=0, second=0, microsecond=0)
@@ -271,19 +273,21 @@ class Weather(BaseModule):
             surface = pygame.image.load(
                 os.path.join('resources', 'icons', '%s.png' % icon_name))
             surface = pygame.transform.scale(surface,
-                                             (int(self.width * 0.05),
+                                             (int(self.width * 0.07),
                                               int(self.width * 0.05)))
-            position = surface.get_rect(left=self.width * init_left_pos, top=self.height * 0.18)
+            position = surface.get_rect(left=self.width * init_left_pos, top=self.height * 0.16)
             self.new_data.append((surface, position))
+
+            init_left_pos += 0.017
 
             temp = '%d\u00b0' % self.find_temp(weather)
             surface = self.font('light', 0.02).render(temp, True, self.color)
-            position = surface.get_rect(left=self.width * init_left_pos, top=self.height * 0.21)
+            position = surface.get_rect(left=self.width * init_left_pos, top=self.height * 0.185)
             self.new_data.append((surface, position))
 
             hours = parser.parse(weather['validTime']).strftime('%a')
             surface = self.font('light', 0.0095).render(hours, True, self.color)
-            position = surface.get_rect(left=self.width * init_left_pos, top=self.height * 0.235)
+            position = surface.get_rect(left=self.width * init_left_pos, top=self.height * 0.21)
             self.new_data.append((surface, position))
 
             init_left_pos += 0.06
