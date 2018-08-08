@@ -43,8 +43,8 @@ class Clock(BaseModule):
         date_scale = 0.02
 
         today = datetime.today()
-        text = '{weekday}, {month} {day}'.format(weekday=today.strftime('%A'),
-                                                 month=today.strftime('%B'),
+        text = '{weekday}, {month} {day}'.format(weekday=today.strftime('%a'),
+                                                 month=today.strftime('%b'),
                                                  day=today.day)
         surface = self.font('regular', date_scale).render(text, True, self.color)
         position = surface.get_rect(left=self.width * date_pos_left, top=self.height * date_pos_top)
