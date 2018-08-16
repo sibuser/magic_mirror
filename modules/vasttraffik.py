@@ -22,20 +22,26 @@ class Vasttrafik(BaseModule):
         self.traffic_top = None
 
     def update(self):
-        while not self.shutdown:
-            self.traffic_top = 0.4
+        try:
+            while not self.shutdown:
+                self.traffic_top = 0.4
 
-            for stop in BUSS_STOPS:
-                self.update_departures(stop)
+                for stop in BUSS_STOPS:
+                    self.update_departures(stop)
 
-            self.data.clear()
-            self.data = self.new_data[:]
-            self.new_data.clear()
-            logging.debug("Completed updating %s..." % self.__class__.__name__)
-            self.sleep(VASTTRAFIK_UPDATE_DELAY)
-
-        self.data.clear()
-        logging.info('Stopped %s...' % self.__class__.__name__)
+                self.data.clear()
+                self.data = self.new_data[:]
+                self.new_data.clear()
+                logging.debug("Completed updating %s..." % self.__class__.__name__)
+                self.sleep(VASTTRAFIK_UPDATE_DELAY)
+        except Exception as e:
+                self.data.clear()
+                logging.error(e)
+        finally:
+            if not self.shutdown:
+                self.sleep(5)
+                self.update()
+            logging.info('Stopped %s...' % self.__class__.__name__)
 
     def update_departures(self, buss_stop):
         self.move_down()
