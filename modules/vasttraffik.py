@@ -1,4 +1,4 @@
-from collections import defaultdict
+from collections import defaultdict, OrderedDict
 
 import vasttrafik
 from datetime import datetime
@@ -115,7 +115,11 @@ def group_board_by_direction(departures):
         if 1 < depart_time_in < 50:
             departure['depart_in'] = depart_time_in
             grouped_directions[departure['direction']].append(departure)
-    return grouped_directions
+
+    sorted_departures = OrderedDict()
+    for k, v in sorted(grouped_directions.items(), key=lambda item: item[1][0]['depart_in']):
+        sorted_departures[k] = v
+    return sorted_departures
 
 
 def calc_depart_time_in_min(arrival):
