@@ -39,7 +39,7 @@ class Clock(BaseModule):
 
     def show_date(self):
         date_pos_top = 0.052
-        date_pos_left = 0.72
+        date_pos_left = 0.745
         date_scale = 0.02
 
         today = datetime.today()

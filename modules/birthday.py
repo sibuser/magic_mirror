@@ -76,7 +76,7 @@ class Birthday(BaseModule):
         elif start.day - today == 1:
             msg = 'Tomorrow'
         else:
-            msg = start.strftime("%d %B")
+            msg = start.strftime("%d %b")
         surface = self.font('regular', 0.01).render(msg, True, self.color)
         position = surface.get_rect(left=self.width / 100, top=self.height * self.position_top)
         self.new_data.append((surface, position))
