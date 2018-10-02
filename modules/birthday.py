@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from threading import Thread
 
 from apiclient.discovery import build
@@ -36,7 +36,7 @@ class Birthday(BaseModule):
         while not self.shutdown:
             self.event_padding = 0.012
             self.position_top = 0.8
-            events = list(self.only_current_month(self.fetch_upcoming_event()))
+            events = self.fetch_upcoming_event()
             if events:
                 self.show_header()
                 self.move_down()
@@ -51,14 +51,6 @@ class Birthday(BaseModule):
             logging.debug("Completed updating %s..." % self.__class__.__name__)
             self.sleep(BIRTHDAY_UPDATE_DELAY)
         logging.info('Stopped %s...' % self.__class__.__name__)
-
-    def only_current_month(self, events):
-        today = datetime.today()
-
-        for event in events:
-            start = parser.parse(event['start'].get('dateTime', event['start'].get('date')))
-            if start.month == today.month and start.year == today.year:
-                yield event
 
     def move_down(self):
         self.position_top += self.event_padding
@@ -90,9 +82,10 @@ class Birthday(BaseModule):
         # Call the Calendar API
         try:
             now = datetime.utcnow().replace(hour=1, minute=0).isoformat() + 'Z'
+            later = (datetime.today() + timedelta(days=30)).isoformat() + 'Z'
             events_result = self.service.events().list(calendarId=CALENDAR_ID,
                                                        timeMin=now,
-                                                       maxResults=10,
+                                                       timeMax=later,
                                                        singleEvents=True,
                                                        orderBy='startTime').execute()
             events = events_result.get('items', [])
