@@ -54,6 +54,8 @@ class Calendar(BaseModule):
         previous_month = calendar.monthcalendar(m.year, m.month)
 
         for index, day in enumerate(previous_month[-1]):
+            if index == 0 and day:
+                break
             if day:
                 color = COLORS['gray']
                 if self.calendar.is_holiday(m.replace(day=day)):
@@ -87,7 +89,7 @@ class Calendar(BaseModule):
         calendar_week_pos_top -= 0.015
         for index, day in enumerate(next_month[0]):
             if index == 0 and day:
-                return
+                break
             if day:
                 color = COLORS['gray']
                 if self.calendar.is_holiday(m.replace(day=day)):
