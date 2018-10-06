@@ -117,7 +117,7 @@ def group_board_by_direction(departures):
             grouped_directions[departure['direction']].append(departure)
 
     sorted_departures = OrderedDict()
-    for k, v in sorted(grouped_directions.items(), key=lambda item: item[1][0]['depart_in']):
+    for k, v in sorted(grouped_directions.items(), key=lambda item: item[1][0]['direction']):
         sorted_departures[k] = v
     return sorted_departures
 
