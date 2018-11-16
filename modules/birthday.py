@@ -63,9 +63,9 @@ class Birthday(BaseModule):
     def show_date(self, event):
         start = parser.parse(event['start'].get('dateTime', event['start'].get('date')))
         today = datetime.today().day
-        if start.day - today == 0:
+        if start.day - today == 0 and start.month == datetime.today().month:
             msg = 'Today'
-        elif start.day - today == 1:
+        elif start.day - today == 1 and start.month == datetime.today().month:
             msg = 'Tomorrow'
         else:
             msg = start.strftime("%d %b")
