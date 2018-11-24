@@ -23,7 +23,6 @@ class Calendar(BaseModule):
         while not self.shutdown:
             self.show_week_header()
             self.show_calendar()
-            self.show_holidays()
 
             self.data = []
             self.data = self.new_data[:]
@@ -99,28 +98,3 @@ class Calendar(BaseModule):
                                             top=self.height * calendar_week_pos_top)
                 self.new_data.append((surface, position))
             calendar_day_pos_left += 0.03
-
-    def show_holidays(self):
-        holiday_name_scale = 0.01
-        holiday_name_pos_left = 0.78
-        holiday_name_pos_top = 0.9
-
-        holiday_date_pos_left = 0.75
-        holiday_date_pos_top = 0.9
-
-        today = datetime.today()
-        for holiday in self.calendar.holidays():
-            if holiday[0].month == today.month:
-                surface = self.font('regular', holiday_name_scale).render(holiday[1], True,
-                                                                          self.color)
-                position = surface.get_rect(left=self.width * holiday_name_pos_left,
-                                            top=self.height * holiday_name_pos_top)
-                self.new_data.append((surface, position))
-
-                surface = self.font('regular', holiday_name_scale).render(str(holiday[0].day), True,
-                                                                          self.color)
-                position = surface.get_rect(left=self.width * holiday_date_pos_left,
-                                            top=self.height * holiday_date_pos_top)
-                self.new_data.append((surface, position))
-                holiday_date_pos_top += 0.015
-                holiday_name_pos_top += 0.015
