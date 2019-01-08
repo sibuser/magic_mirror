@@ -75,7 +75,7 @@ def main(fullscreen, resolution):
                 for surface, position in data:
                     screen.blit(surface, position)
             pygame.display.flip()
-            pygame.image.save(screen, 'screen_shot.jpg')
+            # pygame.image.save(screen, 'screen_shot.jpg')
             sleep(1)
             if check_if_exit():
                 return
