@@ -77,13 +77,13 @@ class Vasttrafik(BaseModule):
     def show_buss_number(self, departure):
         msg = '{sname}'.format(**departure)
         surface = self.font('light', self.traffic_scale).render(msg, True, self.color)
-        position = surface.get_rect(left=self.width * 0.345, top=self.height * self.traffic_top)
+        position = surface.get_rect(left=self.width * 0.325, top=self.height * self.traffic_top)
         self.new_data.append((surface, position))
 
     def show_destination(self, departure):
         msg = '{direction}'.format(**departure)
         surface = self.font('light', self.traffic_scale).render(msg[:17], True, self.color)
-        position = surface.get_rect(left=self.width * 0.4, top=self.height * self.traffic_top)
+        position = surface.get_rect(left=self.width * 0.38, top=self.height * self.traffic_top)
         self.new_data.append((surface, position))
 
     def show_departure_time(self, departure, left):
