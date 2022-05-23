@@ -41,13 +41,13 @@ class Weather(BaseModule):
             else:
                 self.show_temp()
                 self.show_temp_day()
-                self.show_humidity()
-                self.show_pressure()
+                # self.show_humidity()
+                # self.show_pressure()
                 self.show_condition()
                 self.show_description()
-                self.show_city()
-                self.show_sunrise()
-                self.show_sunset()
+                # self.show_city()
+                # self.show_sunrise()
+                # self.show_sunset()
                 self.show_forecast()
             self.data.clear()
             self.data = self.new_data[:]
@@ -109,8 +109,8 @@ class Weather(BaseModule):
 
     def show_temp(self):
         temp = '%d\u00b0' % self.find_temp(self.smhi_forecast['timeSeries'][0])
-        surface = self.font('light', 0.035).render(temp, True, self.color)
-        position = surface.get_rect(left=self.width * 0.01, top=0)
+        surface = self.font('light', 0.055).render(temp, True, self.color)
+        position = surface.get_rect(left=self.width * 0.045, top=0.15)
         self.new_data.append((surface, position))
 
     def find_condition(self, forecast):
@@ -131,26 +131,26 @@ class Weather(BaseModule):
         return temp
 
     def show_humidity(self):
-        hum_pos_top = self.height * 0.04
-        hum_pos_left = self.width * 0.185
+        hum_pos_top = self.height * 0.07
+        hum_pos_left = self.width * 0.215
 
         humidity = '%d' % (self.weather_data['main']['humidity'])
         surface = self.font('light', 0.015).render(humidity, True, self.color)
         position = surface.get_rect(left=hum_pos_left, top=hum_pos_top)
         self.new_data.append((surface, position))
 
-        hum_icon_pos_top = self.height * 0.0425
-        hum_icon_pos_left = self.width * 0.24
+        hum_icon_pos_top = self.height * 0.0455
+        hum_icon_pos_left = self.width * 0.27
 
-        surface = pygame.image.load(os.path.join('resources', 'icons', 'humidity.png'))
+        surface = pygame.image.load(os.path.join('resources', 'icons', 'humidity.bmp'))
         surface = pygame.transform.scale(surface,
                                          (int(self.width * 0.025), int(self.width * 0.025)))
         position = surface.get_rect(left=hum_icon_pos_left, top=hum_icon_pos_top)
         self.new_data.append((surface, position))
 
     def show_pressure(self):
-        pos_top = self.height * 0.06
-        pos_left = self.width * 0.17
+        pos_top = self.height * 0.09
+        pos_left = self.width * 0.20
 
         pressure = '%d' % (self.weather_data['main']['pressure'])
         surface = self.font('light', 0.015).render(pressure, True, self.color)
@@ -160,7 +160,7 @@ class Weather(BaseModule):
         icon_pos_top = self.height * 0.0625
         icon_pos_left = self.width * 0.24
 
-        surface = pygame.image.load(os.path.join('resources', 'icons', 'barometer.png'))
+        surface = pygame.image.load(os.path.join('resources', 'icons', 'barometer.bmp'))
         surface = pygame.transform.scale(surface,
                                          (int(self.width * 0.025), int(self.width * 0.025)))
         position = surface.get_rect(left=icon_pos_left, top=icon_pos_top)
@@ -169,11 +169,11 @@ class Weather(BaseModule):
     def show_condition(self):
         icon_name = self.icon_mapping.get(self.find_condition(self.smhi_forecast['timeSeries'][0]))[
             'icon']
-        if not os.path.isfile(os.path.join('resources', 'icons', '%s.png' % icon_name)):
+        if not os.path.isfile(os.path.join('resources', 'icons', '%s.bmp' % icon_name)):
             icon_name = 'default'
-        surface = pygame.image.load(os.path.join('resources', 'icons', '%s.png' % icon_name))
-        surface = pygame.transform.scale(surface, (int(self.width * 0.08), int(self.width * 0.06)))
-        position = surface.get_rect(left=self.width * 0.09, top=self.height * 0.007)
+        surface = pygame.image.load(os.path.join('resources', 'icons', '%s.bmp' % icon_name))
+        surface = pygame.transform.scale(surface, (int(self.width * 0.12), int(self.width * 0.10)))
+        position = surface.get_rect(left=self.width * 0.17, top=self.height * 0.010)
         self.new_data.append((surface, position))
 
     def show_description(self):
@@ -183,54 +183,54 @@ class Weather(BaseModule):
                 condition = param['values'][0]
                 break
         desc = self.icon_mapping.get(condition)['label']
-        surface = self.font('light', 0.01).render(desc, True, self.color)
-        position = surface.get_rect(left=self.width * 0.01, top=self.height * 0.04)
+        surface = self.font('light', 0.015).render(desc, True, self.color)
+        position = surface.get_rect(left=self.width * 0.045, top=self.height * 0.055)
         self.new_data.append((surface, position))
 
     def show_city(self):
         city_name = self.weather_data['name']
         surface = self.font('light', 0.01).render(city_name, True, self.color)
-        position = surface.get_rect(left=self.width * 0.01, top=self.height * 0.055)
+        position = surface.get_rect(left=self.width * 0.03, top=self.height * 0.055)
         self.new_data.append((surface, position))
 
     def show_sunset(self):
         sunset = datetime.fromtimestamp(self.weather_data['sys']['sunset']).strftime("%H:%M")
         surface = self.font('regular', 0.015).render(sunset, True, self.color)
-        position = surface.get_rect(left=self.width * 0.17, top=self.height * 0.02)
+        position = surface.get_rect(left=self.width * 0.20, top=self.height * 0.02)
         self.new_data.append((surface, position))
 
-        surface = pygame.image.load(os.path.join('resources', 'icons', 'sunset.png'))
+        surface = pygame.image.load(os.path.join('resources', 'icons', 'sunset.bmp'))
         surface = pygame.transform.scale(surface,
                                          (int(self.width * 0.025), int(self.width * 0.025)))
-        position = surface.get_rect(left=self.width * 0.24, top=self.height * 0.0225)
+        position = surface.get_rect(left=self.width * 0.27, top=self.height * 0.0225)
         self.new_data.append((surface, position))
 
     def show_sunrise(self):
         sunrise = datetime.fromtimestamp(self.weather_data['sys']['sunrise']).strftime("%H:%M")
         surface = self.font('regular', 0.015).render(sunrise, True, self.color)
-        position = surface.get_rect(left=self.width * 0.17, top=self.height * 0)
+        position = surface.get_rect(left=self.width * 0.20, top=self.height * 0)
         self.new_data.append((surface, position))
 
-        surface = pygame.image.load(os.path.join('resources', 'icons', 'sunrise.png'))
+        surface = pygame.image.load(os.path.join('resources', 'icons', 'sunrise.bmp'))
         surface = pygame.transform.scale(surface,
                                          (int(self.width * 0.025), int(self.width * 0.025)))
-        position = surface.get_rect(left=self.width * 0.24, top=self.height * 0.0025)
+        position = surface.get_rect(left=self.width * 0.27, top=self.height * 0.0025)
         self.new_data.append((surface, position))
 
     def show_temp_day(self):
         step = 3
         counter = 0
-        init_left_pos = 0.01
+        init_left_pos = 0.04
 
         for weather in self.smhi_forecast['timeSeries']:
             forecast_time = parser.parse(weather['validTime'])
             if forecast_time.hour == (datetime.now() + timedelta(hours=step)).time().hour:
                 condition = self.find_condition(weather)
                 icon_name = self.icon_mapping.get(condition)['icon']
-                if not os.path.isfile(os.path.join('resources', 'icons', '%s.png' % icon_name)):
+                if not os.path.isfile(os.path.join('resources', 'icons', '%s.bmp' % icon_name)):
                     icon_name = 'default'
                 surface = pygame.image.load(
-                    os.path.join('resources', 'icons', '%s.png' % icon_name))
+                    os.path.join('resources', 'icons', '%s.bmp' % icon_name))
                 surface = pygame.transform.scale(surface,
                                                  (int(self.width * 0.07),
                                                   int(self.width * 0.05)))
@@ -258,7 +258,7 @@ class Weather(BaseModule):
     def show_forecast(self):
         tmp = []
         today = datetime.today().replace(hour=12, minute=0, second=0, microsecond=0)
-        init_left_pos = 0.01
+        init_left_pos = 0.04
 
         for forecast in self.smhi_forecast['timeSeries']:
             dt = parser.parse(forecast['validTime'])
@@ -268,10 +268,10 @@ class Weather(BaseModule):
         for weather in tmp[:5]:
             condition = self.find_condition(weather)
             icon_name = self.icon_mapping.get(condition)['icon']
-            if not os.path.isfile(os.path.join('resources', 'icons', '%s.png' % icon_name)):
+            if not os.path.isfile(os.path.join('resources', 'icons', '%s.bmp' % icon_name)):
                 icon_name = 'default'
             surface = pygame.image.load(
-                os.path.join('resources', 'icons', '%s.png' % icon_name))
+                os.path.join('resources', 'icons', '%s.bmp' % icon_name))
             surface = pygame.transform.scale(surface,
                                              (int(self.width * 0.07),
                                               int(self.width * 0.05)))

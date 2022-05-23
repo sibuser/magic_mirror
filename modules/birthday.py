@@ -57,7 +57,7 @@ class Birthday(BaseModule):
 
     def show_header(self):
         surface = self.font('regular', 0.008).render('Birthdays:', True, self.color)
-        position = surface.get_rect(left=self.width / 100, top=self.height * self.position_top)
+        position = surface.get_rect(left=self.width * 0.045, top=self.height * self.position_top)
         self.new_data.append((surface, position))
 
     def show_date(self, event):
@@ -70,12 +70,12 @@ class Birthday(BaseModule):
         else:
             msg = start.strftime("%d %b")
         surface = self.font('regular', 0.01).render(msg, True, self.color)
-        position = surface.get_rect(left=self.width / 100, top=self.height * self.position_top)
+        position = surface.get_rect(left=self.width * 0.045, top=self.height * self.position_top)
         self.new_data.append((surface, position))
 
     def show_summary(self, event):
         surface = self.font('regular', 0.01).render(event['summary'], True, self.color)
-        position = surface.get_rect(left=self.width / 10, top=self.height * self.position_top)
+        position = surface.get_rect(left=self.width * 0.13, top=self.height * self.position_top)
         self.new_data.append((surface, position))
 
     def fetch_upcoming_event(self):
